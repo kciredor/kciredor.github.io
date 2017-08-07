@@ -13,28 +13,16 @@ layout: default
       {% if page.author %}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>
       {% endif %}</p>
-      <div class="post-sharing">
-          <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}&via={{ site.twitter_username }}&related={{ site.twitter_username }}"><img src="{{ "/assets/icon_twitter.png" | relative_url }}" alt="Twitter" title=""></a>
-          <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url={{ site.url }}{{ page.url }}&title={{ page.title }}"><img src="{{ "/assets/icon_reddit.png" | relative_url }}" alt="Reddit" title=""></a>
-          <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title }}&summary={{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}&source=kciredor.com"><img src="{{ "/assets/icon_linkedin.png" | relative_url }}" alt="LinkedIn" title=""></a>
-          <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u={{ site.url }}{{ page.url }}"><img src="{{ "/assets/icon_facebook.png" | relative_url }}" alt="Facebook" title=""></a>
-          <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url={{ site.url }}{{ page.url }}"><img src="{{ "/assets/icon_googleplus.png" | relative_url }}" alt="Google+" title=""></a>
-          <p></p>
-      </div>
+      {% include sharing.html %}
+      <p></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
   </div>
 
-  <div class="post-sharing">
-      <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}&via={{ site.twitter_username }}&related={{ site.twitter_username }}"><img src="{{ "/assets/icon_twitter.png" | relative_url }}" alt="Twitter" title=""></a>
-      <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url={{ site.url }}{{ page.url }}&title={{ page.title }}"><img src="{{ "/assets/icon_reddit.png" | relative_url }}" alt="Reddit" title=""></a>
-      <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title }}&summary={{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}&source=kciredor.com"><img src="{{ "/assets/icon_linkedin.png" | relative_url }}" alt="LinkedIn" title=""></a>
-      <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u={{ site.url }}{{ page.url }}"><img src="{{ "/assets/icon_facebook.png" | relative_url }}" alt="Facebook" title=""></a>
-      <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url={{ site.url }}{{ page.url }}"><img src="{{ "/assets/icon_googleplus.png" | relative_url }}" alt="Google+" title=""></a>
-      <p></p>
-  </div>
+  {% include sharing.html %}
+  <p></p>
 
   {% if site.disqus.shortname %}
     {% include disqus_comments.html %}
