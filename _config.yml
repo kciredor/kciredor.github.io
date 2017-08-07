@@ -14,21 +14,26 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: kciredor's bug bounty blog
-email: roderick@wehandle.it
+author: Roderick Schaefer
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Security researcher. Software engineer. Independent.
+  This blog features my write-up's on interesting research and security findings.
+  Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://kciredor.com" # the base hostname & protocol for your site, e.g. http://example.com
+permalink: /:title.html
 twitter_username: kciredor_
 github_username:  kciredor
+google_analytics: UA-104198926-1
+disqus:
+  shortname: kciredor
 
 # Build settings
 markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

@@ -1,0 +1,2 @@
+Sitemap: https://kciredor.com/sitemap.xml
+User-agent: *
