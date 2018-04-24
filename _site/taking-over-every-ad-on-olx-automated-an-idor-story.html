@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Taking over every Ad on OLX (automated), an IDOR story</title>
-  <meta name="description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...">
-
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html">
-  <link rel="alternate" type="application/rss+xml" title="kciredor&#39;s information security blog" href="/feed.xml">
-  
-  
-  <script>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Taking over every Ad on OLX (automated), an IDOR story | kciredor’s information security blog</title>
+<meta name="generator" content="Jekyll v3.8.0" />
+<meta property="og:title" content="Taking over every Ad on OLX (automated), an IDOR story" />
+<meta name="author" content="Roderick Schaefer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!" />
+<meta property="og:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!" />
+<link rel="canonical" href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" />
+<meta property="og:url" content="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" />
+<meta property="og:site_name" content="kciredor’s information security blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-10-18T15:30:00+02:00" />
+<script type="application/ld+json">
+{"dateModified":"2017-10-18T15:30:00+02:00","datePublished":"2017-10-18T15:30:00+02:00","@type":"BlogPosting","headline":"Taking over every Ad on OLX (automated), an IDOR story","mainEntityOfPage":{"@type":"WebPage","@id":"https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"},"url":"https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html","author":{"@type":"Person","name":"Roderick Schaefer"},"description":"Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://kciredor.com/feed.xml" title="kciredor's information security blog" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -22,17 +27,11 @@
 
   ga('create', 'UA-104198926-1', 'auto');
   ga('send', 'pageview');
-
+}
 </script>
   
-
-  
 </head>
-
-
-  <body>
-
-    <header class="site-header" role="banner">
+<body><header class="site-header" role="banner">
 
   <div class="wrapper">
     
@@ -42,9 +41,7 @@
     
   </div>
 </header>
-
-
-    <main class="page-content" aria-label="Content">
+<main class="page-content" aria-label="Content">
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
@@ -166,9 +163,7 @@ kciredor</p>
   <p></p>
 
   
-    
-
-  <div id="disqus_thread"></div>
+    <div id="disqus_thread"></div>
   <script>
     var disqus_config = function () {
       this.page.url = 'https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html';
@@ -185,15 +180,11 @@ kciredor</p>
     })();
   </script>
   <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
   
 </article>
 
       </div>
-    </main>
-
-    <footer class="site-footer">
+    </main><footer class="site-footer">
 
   <div class="wrapper">
 
@@ -231,8 +222,6 @@ kciredor</p>
   </div>
 
 </footer>
-
-
-  </body>
+</body>
 
 </html>
