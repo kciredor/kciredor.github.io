@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.0 -->
+<title>Throwing 500 vm’s at your fuzzing target being an individual security researcher | kciredor’s information security blog</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Throwing 500 vm’s at your fuzzing target being an individual security researcher" />
+<meta name="author" content="Roderick Schaefer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues." />
+<meta property="og:description" content="Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues." />
+<link rel="canonical" href="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html" />
+<meta property="og:url" content="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html" />
+<meta property="og:site_name" content="kciredor’s information security blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-03T10:00:00+02:00" />
+<script type="application/ld+json">
+{"url":"https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html","headline":"Throwing 500 vm’s at your fuzzing target being an individual security researcher","dateModified":"2019-05-03T10:00:00+02:00","datePublished":"2019-05-03T10:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"},"author":{"@type":"Person","name":"Roderick Schaefer"},"description":"Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://kciredor.com/feed.xml" title="kciredor's information security blog" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104198926-1', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">kciredor&#39;s information security blog</a>
+  
+    
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Throwing 500 vm&#39;s at your fuzzing target being an individual security researcher</h1>
+    <p class="post-meta">
+      <time datetime="2019-05-03T10:00:00+02:00" itemprop="datePublished">
+        
+        May 3, 2019
+      </time>
+      </p>
+      <div class="post-sharing">
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Throwing 500 vm's at your fuzzing target being an individual security researcher&quot; by @kciredor_&url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&title=Throwing 500 vm's at your fuzzing target being an individual security researcher"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&title=Throwing 500 vm's at your fuzzing target being an individual security researcher&summary=Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+</div>
+
+      <p></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="adobe-reader-progress">Adobe Reader progress</h1>
+<p>One year ago I blogged about my many attempts and failures at <a href="/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html">fuzzing Adobe Reader</a> and finding exploitable security issues.</p>
+
+<p>Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-19713">CVE-2018-19713</a> for Adobe Reader. Found the bug using ‘What The Fuzz’ targeting a custom plugin I coded which integrates with Adobe Reader.</p>
+
+<p>So what’s the next step?</p>
+
+<h1 id="fuzzing-foxitreader">Fuzzing FoxitReader</h1>
+<p>Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.</p>
+
+<p>Having learned from Adobe Reader I immediately tried to find a way to fuzz FoxitReader using What The Fuzz. There are many routes to fuzzing FoxitReader and it’s out of the scope of this blog post to go in depth.</p>
+
+<p>To summarize: my fuzzer generates inputs and replaces them in target process memory, resetting FoxitReader’s instruction pointer to evaluate new inputs over and over. No inputs ever touch the harddisk, meaning it’s pretty fast!</p>
+
+<h1 id="the-importance-of-scaling-up">The importance of scaling up</h1>
+<p>So far so good, now let’s do some calculations to get an understanding of the importance of scaling up your fuzzing efforts.</p>
+
+<p>According to a presentation given by @ifsecure, testing browsers you should try about 100.000.000 different inputs. Let’s make this our target number. Given my ability to fuzz at about 1.5 inputs per second per vm this would take about 771 days running 1 vm. This makes no sense: within that long period of time, FoxitReader has been updated multiple times and bugs have been fixed. Even worse: it will take way too long to find out if your fuzzing strategy actually works or needs improvement. Even with 10 vm’s, which is still manually manageable, it will take months.</p>
+
+<p>Sure, fuzzing 1.5 inputs per second is generally considered to be slow. Let’s take into account that my input files are quite large on purpose, so parsing takes time. Furthermore, I’m targeting FoxitReader as a whole, not a small dll or harness, which is also the reason I can only run 1 fuzzer per vm instead of simply using multiple cores. FoxitReader can’t run multiple instances in parallel.</p>
+
+<p>What if we could use 500 vm’s instead of 1 or 10? We’ll end up needing only 2 days!</p>
+
+<p>This makes for a solid case of scaling up. But where to find enough power without spending too much money? How to orchestrate a massive amount of vm’s?</p>
+
+<h1 id="how-to-scale-up">How to scale up</h1>
+<p>Keep in mind some of the bigger tech companies may have in house fuzzing at scale ‘as a service’, but what if you are on your own?</p>
+
+<p>Here’s a list of things we need to accomplish:</p>
+<ul>
+  <li>Fuzzing your target (e.g. FoxitReader)</li>
+  <li>Running on Windows 8</li>
+  <li>At scale</li>
+  <li>Keeping costs low</li>
+  <li>Collecting crashes</li>
+</ul>
+
+<p>Quickly you’ll realize you need a cloud provider with enough power. Yet running 500 instances with Google, Amazon or Azure will certainly become an expensive experience. Let alone not all of them will allow you to bring your own Windows version/license. It’s advisable not to settle for a ready-made Windows Server image: FoxitReader is the target, not the exploit mitigations Windows may have added. Currently, I’d stick to Windows 8.</p>
+
+<h2 id="keeping-costs-low">Keeping costs low</h2>
+<p>Let’s look at the problem of the costs. Think in terms of spare capacity. Most cloud providers will not be selling 100% of their capacity to their customers all the time. Many cloud providers offer their spare capacity at reduced costs, but of course, there’s always a catch. For instance: you may buy a spare vm at 20% of the normal costs, but within 24 hours maximum, it will be removed from your account because it was sold for the regular price to another customer.</p>
+
+<h2 id="collecting-crashes">Collecting crashes</h2>
+<p>Now you might be thinking ‘what happens to my crashes when I suddenly lose my running vm’s and fuzzers?’. Good question ;-) How about creating some external storage like an S3 bucket and having your fuzzer push every crash it finds to the bucket? While you’re at it, using something like pushbullet you can make your fuzzer send you a push notification to your phone every time you find a crash!</p>
+
+<h2 id="at-scale">At scale</h2>
+<p>But you keep on losing vm’s during fuzzing because of the usage of spare capacity, right? In comes the autoscaling feature of your cloud provider! Autoscaling groups allow you to define a minimum/maximum set of instances running a certain image and instance type. Setting the minimum and maximum amount to the same number and ensuring we use spare capacity and our own image, it doesn’t matter if the cloud provider decides to remove one or multiple vm’s all the time: new ones will automatically be launched to stay in shape with the min/max we defined. This process may take some time (vm’s need to be allocated and booted), so we just add this overhead to our calculations targeting the number of inputs we want to fuzz.</p>
+
+<h2 id="running-on-windows-8">Running on Windows 8</h2>
+<p>Time to think about running your own Windows version next. You may not be able to create an image to launch new vm’s with Windows 8, but we sure are able to create images from a Linux vm offered by the cloud provider. What if you could split a multi-core Linux vm into multiple nested single core Windows 8 vm’s? In comes Proxmox! Proxmox allows you to manage resource allocation using a web interface and installing vm’s using any .iso you prefer, including Windows. As long as your cloud provider offers instances that allow for nested VT-X, the performance penalty of nesting will be minimal.</p>
+
+<h2 id="step-by-step">Step by step</h2>
+<p>If you do not fully understand the pieces of the puzzle, please award yourself some time to learn more about engineering and then try this again. Start by getting yourself a cloud account and playing with things, building things, breaking things and fixing them.</p>
+
+<p>So let’s put two and two together:</p>
+<ul>
+  <li>Find yourself a cloud provider offering the usage of nested vm’s (VT-X) and spare capacity usage</li>
+  <li>Calculate the sweet spot of instances x cores in terms of costs, for me 50 vm’s with 10 cores each was the cheapest. This works out to 24gb ram (10 * 2 + slack) and 50gb SSD each.</li>
+  <li>Install Proxmox on a Linux instance and install Windows in a nested vm on a single core.</li>
+  <li>Code the pushing of crashing inputs to external storage like S3 into your fuzzer of choice.</li>
+  <li>Install both your fuzzer and target application.</li>
+  <li>Set your fuzzer to run automatically at Windows startup.</li>
+  <li>Convert the Windows vm into a ‘template’. Now create linked clones until you have as many Windows vm’s as you have cores available on this instance. Linked clones save space and the performance penalty is minimal.</li>
+  <li>Toggle all of the vm’s to run automatically at Proxmox boot.</li>
+  <li>Create an image of your fully ready Proxmox instance.</li>
+  <li>Create an autoscaling group using your image and instance type of choice, using spare capacity, setting the minimum and maximum number of instances to 2. Always ensure everything works exactly as expected before scaling up.</li>
+  <li>Everything good? Then let’s go and up the min/max to 50, effectively resulting in 500 Windows vm’s fuzzing FoxitReader in parallel!</li>
+  <li>You may hit limits set by your cloud provider, like the maximum number of cores you may use at once. Respectfully requesting a limit increase truthfully explaining your intentions worked out for me.</li>
+</ul>
+
+<p><img src="/assets/post_500-scaling.png" alt="Fuzzing with 500 vm's" title="" /></p>
+
+<p>Ending up with 48 hours of fuzzing hitting the 100.000.000 inputs mark, I was charged about $250,-.</p>
+
+<h1 id="room-for-improvement">Room for improvement</h1>
+<p>It would be nice if the fuzzer could update itself upon vm launch by downloading and extracting ‘latest.zip’. This way you can update your fuzzer, settings, grammar, etc. without having to create a new vm image saving you time between iterations.</p>
+
+<h1 id="last-words">Last words</h1>
+<p>On a day to day basis, I experience the advantage of knowing how to code and automate things, supporting my security research. It works out both ways: security awareness actively improves your quality of work as a developer / engineer. Having experience with all of dev/sec/ops gives you many new opportunities to step up your game.</p>
+
+<p>Don’t forget to document and git version your work. After a couple of months you need to be able to pick up where you left, certain things will not make sense anymore by that time.</p>
+
+<p>Thanks @rnotcln for inspiring me to think about properly scaling fuzzing jobs. Thanks @steventseeley for sharing high-quality posts on FoxitReader and proofreading this blog post. Thanks @ifsecure for the magic inputs number and open sourced tooling.</p>
+
+<p>Let’s keep on hacking!</p>
+
+<p>Cheers,
+kciredor</p>
+
+  </div>
+
+  <div class="post-sharing">
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Throwing 500 vm's at your fuzzing target being an individual security researcher&quot; by @kciredor_&url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&title=Throwing 500 vm's at your fuzzing target being an individual security researcher"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html&title=Throwing 500 vm's at your fuzzing target being an individual security researcher&summary=Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+</div>
+
+  <p></p>
+
+  
+    <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html';
+      this.page.identifier = 'https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://kciredor.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  
+</article>
+
+      </div>
+    </main><footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">kciredor&#39;s information security blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              Roderick Schaefer
+            
+            </li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          <li><a href="https://twitter.com/kciredor_" target="_blank" rel="nofollow noopener noreferrer">twitter</a></li>
+          <li><a href="https://github.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">github</a></li>
+          <li><a href="https://wehandle.it/" target="_blank" rel="nofollow noopener noreferrer">company</a></li>
+          <li><a href="https://www.linkedin.com/in/roderickschaefer/" target="_blank" rel="nofollow noopener noreferrer">linkedin</a></li>
+          <li><a href="https://hackerone.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">hackerone</a></li>
+          <li><a href="https://bugcrowd.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">bugcrowd</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Security researcher. Software engineer. Independent. This blog features my write-up&#39;s on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

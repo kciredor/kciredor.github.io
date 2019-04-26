@@ -503,3 +503,6 @@ table {
     color: #008080; }
   .highlight .il {
     color: #099; }
+
+.post-list h1 {
+  font-size: 1.2em !important; }
