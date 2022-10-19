@@ -3,10 +3,10 @@
 	"file": "main.css",
 	"sources": [
 		"main.scss",
-		"../../../../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima.scss",
-		"../../../../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_base.scss",
-		"../../../../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_layout.scss",
-		"../../../../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_syntax-highlighting.scss"
+		"../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima.scss",
+		"../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_base.scss",
+		"../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_layout.scss",
+		"../../.local/share/gem/ruby/2.7.0/gems/minima-2.5.1/_sass/minima/_syntax-highlighting.scss"
 	],
 	"sourcesContent": [
 		"@import \"minima\";\n\n.post-list {\n  h1 {\n    font-size: 1.2em !important;\n  }\n}\n",

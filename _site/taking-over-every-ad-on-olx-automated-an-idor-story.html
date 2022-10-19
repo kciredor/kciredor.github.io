@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Taking over every Ad on OLX (automated), an IDOR story | kciredor’s information security blog</title>
+<title>Taking over every Ad on OLX (automated), an IDOR story | kciredor’s software engineering and security research blog</title>
 <meta name="generator" content="Jekyll v4.2.2" />
 <meta property="og:title" content="Taking over every Ad on OLX (automated), an IDOR story" />
 <meta name="author" content="Roderick Schaefer" />
@@ -12,7 +12,7 @@
 <meta property="og:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!" />
 <link rel="canonical" href="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" />
 <meta property="og:url" content="https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html" />
-<meta property="og:site_name" content="kciredor’s information security blog" />
+<meta property="og:site_name" content="kciredor’s software engineering and security research blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-10-18T15:30:00+02:00" />
 <meta name="twitter:card" content="summary" />
@@ -20,7 +20,8 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Roderick Schaefer"},"dateModified":"2017-10-18T15:30:00+02:00","datePublished":"2017-10-18T15:30:00+02:00","description":"Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!","headline":"Taking over every Ad on OLX (automated), an IDOR story","mainEntityOfPage":{"@type":"WebPage","@id":"https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"},"url":"https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://kciredor.com/feed.xml" title="kciredor's information security blog" /><script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://kciredor.com/feed.xml" title="kciredor's software engineering and security research blog" /><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -35,8 +36,8 @@
   <div class="wrapper">
     
     
-    <a class="site-title" href="/">kciredor&#39;s information security blog</a>
-  
+    <a class="site-title" href="/">kciredor&#39;s software engineering and security research blog</a>
+ 
     
   </div>
 </header>
@@ -55,9 +56,8 @@
       <div class="post-sharing">
   <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by @kciredor_&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
   <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story&summary=Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?href=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&display=popup"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
 </div>
 
       <p></p>
@@ -149,14 +149,17 @@ X-Origin-OLX: production
 <p>Cheers,
 kciredor</p>
 
+<div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by <a href="https://twitter.com/kciredor_?ref_src=twsrc%5Etfw">@kciredor_</a> <a href="https://t.co/kbKfihH04L">https://t.co/kbKfihH04L</a> <a href="https://twitter.com/hashtag/bugbounty?src=hash&amp;ref_src=twsrc%5Etfw">#bugbounty</a> <a href="https://twitter.com/hashtag/infosec?src=hash&amp;ref_src=twsrc%5Etfw">#infosec</a> <a href="https://twitter.com/hashtag/idor?src=hash&amp;ref_src=twsrc%5Etfw">#idor</a> <a href="https://twitter.com/hashtag/olx?src=hash&amp;ref_src=twsrc%5Etfw">#olx</a></p>&mdash; Roderick Schaefer (@kciredor_) <a href="https://twitter.com/kciredor_/status/920647329652371456?ref_src=twsrc%5Etfw">October 18, 2017</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+
   </div>
 
   <div class="post-sharing">
   <a rel="noopener noreferrer nofollow" target="_blank" href="https://twitter.com/intent/tweet?text=&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by @kciredor_&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&related=kciredor_"><img src="/assets/icon_twitter.png" alt="Twitter" title=""></a>
   <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.reddit.com/submit?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story"><img src="/assets/icon_reddit.png" alt="Reddit" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&title=Taking over every Ad on OLX (automated), an IDOR story&summary=Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack ...&source=kciredor.com"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?u=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
-  <a rel="noopener noreferrer nofollow" target="_blank" href="https://plus.google.com/share?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_googleplus.png" alt="Google+" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html"><img src="/assets/icon_linkedin.png" alt="LinkedIn" title=""></a>
+  <a rel="noopener noreferrer nofollow" target="_blank" href="https://facebook.com/sharer.php?href=https://kciredor.com/taking-over-every-ad-on-olx-automated-an-idor-story.html&display=popup"><img src="/assets/icon_facebook.png" alt="Facebook" title=""></a>
 </div>
 
   <p></p>
@@ -187,7 +190,7 @@ kciredor</p>
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">kciredor&#39;s information security blog</h2>
+    <h2 class="footer-heading">kciredor&#39;s software engineering and security research blog</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
@@ -205,15 +208,15 @@ kciredor</p>
         <ul class="social-media-list">
           <li><a href="https://twitter.com/kciredor_" target="_blank" rel="nofollow noopener noreferrer">twitter</a></li>
           <li><a href="https://github.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">github</a></li>
-          <li><a href="https://wehandle.it/" target="_blank" rel="nofollow noopener noreferrer">company</a></li>
           <li><a href="https://www.linkedin.com/in/roderickschaefer/" target="_blank" rel="nofollow noopener noreferrer">linkedin</a></li>
+          <li><a href="https://wehandle.it/" target="_blank" rel="nofollow noopener noreferrer">company</a></li>
           <li><a href="https://hackerone.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">hackerone</a></li>
           <li><a href="https://bugcrowd.com/kciredor" target="_blank" rel="nofollow noopener noreferrer">bugcrowd</a></li>
         </ul>
       </div>
 
       <div class="footer-col footer-col-3">
-        <p>Security researcher. Software engineer. Independent. This blog features my write-up&#39;s on interesting research and security findings. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
+        <p>I&#39;m an independent software engineer and security researcher. This blog features my write-up&#39;s on interesting engineering and security topics. Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
 </p>
       </div>
     </div>

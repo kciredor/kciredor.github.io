@@ -7,4 +7,4 @@
 - Save:    git commit + push
 - Publish:
   - git-s3-push
-  - Invalidate cloudfront cache (in het bijzonder / voor de post listing, rss feed en sitemap)
+  - Invalidate cloudfront cache

@@ -84,3 +84,5 @@ Let's keep on hacking!
 
 Cheers,
 kciredor
+
+{% twitter https://twitter.com/kciredor_/status/920647329652371456 %}
