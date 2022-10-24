@@ -10,6 +10,7 @@ layout: default
         {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
         {{ page.date | date: date_format }}
       </time>
+      <i>&nbsp;&nbsp;[ {% for category in page.categories %}{{ category }} {% endfor %}]</i>
       {% if page.author %}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>
       {% endif %}</p>
@@ -28,3 +29,6 @@ layout: default
     {% include disqus_comments.html %}
   {% endif %}
 </article>
+
+<script async data-uid="a4ba367088" src="https://kciredor.ck.page/a4ba367088/index.js"></script>
+<style>.formkit-slide-in { width: auto !important;</style>

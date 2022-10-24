@@ -2,7 +2,7 @@
 layout: post
 title:  "My first month as a full-time bug bounty hunter"
 date:   2017-08-07 15:00:00 +0200
-categories: bugbounty infosec security
+categories: bugbounty
 ---
 # Introduction #
 Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I'm new and working hard to get very much involved. By sharing my journey and considerations so far, I'm hoping for more interested people to give it a shot!

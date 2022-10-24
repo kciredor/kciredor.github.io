@@ -12,7 +12,10 @@ layout: default
     {% for post in site.posts %}
       <li>
         {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        <span class="post-meta">
+          {{ post.date | date: date_format }}
+          <i>&nbsp;&nbsp;[ {% for category in post.categories %}{{ category }} {% endfor %}]</i>
+        </span>
 
         <h2>
           <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
@@ -27,8 +30,5 @@ layout: default
     {% endfor %}
   </ul>
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
-
-  {% include sharing.html %}
-
+  <script async data-uid="3463438ea8" src="https://kciredor.ck.page/3463438ea8/index.js"></script>
 </div>

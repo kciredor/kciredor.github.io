@@ -2,7 +2,7 @@
 layout: post
 title:  "First bounty, time to step up my game"
 date:   2017-09-19 15:20:00 +0200
-categories: bugbounty some xss infosec security
+categories: bugbounty xss
 ---
 # What happened #
 Hello again and thanks for reading my second blog post! After publishing my [first blog]({{ site.baseurl }}{% post_url 2017-08-07-my-first-month-as-a-full-time-bug-bounty-hunter %}) I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my [first month]({{ site.baseurl }}{% post_url 2017-08-07-my-first-month-as-a-full-time-bug-bounty-hunter %}). This SOME issue I found is not to be made public, so I won't be able to mention company details and will have to mask url's etc.

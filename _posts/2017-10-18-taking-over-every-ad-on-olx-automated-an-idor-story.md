@@ -2,7 +2,7 @@
 layout: post
 title:  "Taking over every Ad on OLX (automated), an IDOR story"
 date:   2017-10-18 15:30:00 +0200
-categories: bugbounty infosec security olx idor high automated
+categories: bugbounty idor
 ---
 # Public disclosure #
 Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it's time for a write-up!

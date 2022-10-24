@@ -2,7 +2,7 @@
 layout: post
 title: "Throwing 500 vm's at your fuzzing target being an individual security researcher"
 date:   2019-05-03 10:00:00 +0200
-categories: exploits fuzzing pdf bugbounty infosec
+categories: devops fuzzing pdf
 ---
 # Adobe Reader progress #
 One year ago I blogged about my many attempts and failures at [fuzzing Adobe Reader]({{ site.baseurl }}{% post_url 2018-04-24-fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit %}) and finding exploitable security issues.
