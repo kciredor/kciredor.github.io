@@ -18,11 +18,11 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 #
-title: kciredor's software engineering and security research blog
+title: kciredor's software and security blog
 author: Roderick Schaefer
 description: > # this means to ignore newlines until "baseurl:"
   I'm an independent software engineer and security researcher.
-  This blog features my write-up's on interesting engineering and security topics.
+  This blog features my write-up's on interesting software and security topics.
   Make sure you follow me on Twitter @kciredor_ to stay up to date on new posts!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://kciredor.com" # the base hostname & protocol for your site, e.g. http://example.com
