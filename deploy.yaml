@@ -1,0 +1,114 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kciredor-com
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kciredor-com
+  name: blog
+  labels:
+    app: blog
+spec:
+  selector:
+    matchLabels:
+      app: blog
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+      containers:
+      - name: blog
+        image: eu.gcr.io/shining-domain-219614/kciredor-com:latest
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        resources:
+          requests:
+            cpu: 20m
+            memory: 20Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kciredor-com
+  name: blog
+  labels:
+    app: blog
+spec:
+  type: NodePort
+  selector:
+    app: blog
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: kciredor-com
+  name: catchall
+  annotations:
+    # Override default google ingress.
+    kubernetes.io/ingress.class: nginx
+    # Redirect everything.
+    nginx.ingress.kubernetes.io/permanent-redirect: https://kciredor.com/
+spec:
+  rules:
+  - host: www.kciredor.com
+    http: &http_rules
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # NOTE: will not be hit but is required for permanent-redirect to work.
+            name: backend
+            port:
+              number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: kciredor-com
+  name: blog
+  annotations:
+    # Override default google ingress.
+    kubernetes.io/ingress.class: nginx
+    # TLS via Letsencrypt. Redirects http->https by default.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+  - host: kciredor.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blog
+            port:
+              number: 80
+  tls:
+  - secretName: cert-kciredor-com
+    hosts:
+    - kciredor.com

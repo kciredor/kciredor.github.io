@@ -6,5 +6,5 @@
 - Build:   `JEKYLL_ENV=production bundle exec jekyll build`
 - Save:    git commit + push
 - Publish:
-  - `git-s3-push`
-  - Invalidate cloudfront cache
+  - `docker build -t eu.gcr.io/shining-domain-219614/kciredor-com --platform linux/amd64 .`
+  - Push and cycle pods, see deploy.yaml.
