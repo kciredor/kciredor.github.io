@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>XSS on Roderick Schaefer</title>
+    <link>https://kciredor.com/tags/xss/</link>
+    <description>Recent content in XSS on Roderick Schaefer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Sep 2017 15:20:00 +0200</lastBuildDate><atom:link href="https://kciredor.com/tags/xss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>First bounty, time to step up my game</title>
+      <link>https://kciredor.com/blog/first-bounty-time-to-step-up-my-game/</link>
+      <pubDate>Tue, 19 Sep 2017 15:20:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/first-bounty-time-to-step-up-my-game/</guid>
+      
+        <description>What happened Hello again and thanks for reading my second blog post! After publishing my first blog I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won&amp;rsquo;t be able to mention company details and will have to mask url&amp;rsquo;s etc.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

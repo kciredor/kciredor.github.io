@@ -1,0 +1,28 @@
+portfolioitems:
+  - title: DevSecOps Projects
+    portfolioitem:
+      - name: We handle IT
+        link: https://www.linkedin.com/in/roderickschaefer/
+        description: "Multidisciplinary roles including strategy and (pre)sales, but mostly engineering. My technical expertise includes Python, Golang, Linux and Kubernetes. Successfully completed multiple Development, Operations and Security projects for customers like MinBZK, VNG (initiated Haven), Logius, NU.nl, OM, Schuberg Philis, CBS, etc."
+        tags:
+          - Development
+          - Operations
+          - Security
+        status: 'OPEN'
+        start: '2007'
+        end: '2023'
+        authors:
+          - Roderick Schaefer
+  - title: Security research
+    portfolioitem:
+      - name: Independent
+        link: https://kciredor.com/categories/security/
+        description: "Researched application security with a focus on binary software exploitation and reverse engineering, which resulted in multiple CVE's. Automated my work as much as possible by coding my own software solutions like custom fuzzers. Additionally investigated multiple websites security through bug bounty hunting."
+        tags:
+          - Fuzzing
+          - BugBounty
+        status: 'FINISHED'
+        start: '2017'
+        end: '2021'
+        authors:
+          - Roderick Schaefer

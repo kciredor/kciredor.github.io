@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>IDOR on Roderick Schaefer</title>
+    <link>https://kciredor.com/tags/idor/</link>
+    <description>Recent content in IDOR on Roderick Schaefer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 Oct 2017 15:30:00 +0200</lastBuildDate><atom:link href="https://kciredor.com/tags/idor/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Taking over every Ad on OLX (automated), an IDOR story</title>
+      <link>https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/</link>
+      <pubDate>Wed, 18 Oct 2017 15:30:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/</guid>
+      
+        <description>Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it&amp;rsquo;s time for a write-up!
+Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,55 @@
+baseURL = 'https://kciredor.com/'
+languageCode = 'en-us'
+title = 'Roderick Schaefer'
+theme = 'anatole'
+googleAnalytics = 'G-BHW0E1E3RC'
+disqusShortname = 'kciredor'
+publishDir = 'docs'
+
+[params]
+title = "Roderick Schaefer"
+author = "Roderick Schaefer"
+profilePicture = "images/roderickschaefer.jpg"
+description = ""
+mainSections = []
+displayMode = "dark"
+doNotLoadAnimations = true
+contentratio = 0.7
+postSectionName = "blog"
+copyright = "kciredor"
+
+[[params.socialIcons]]
+icon = "fab fa-linkedin"
+title = "Linkedin"
+url = "https://www.linkedin.com/in/roderickschaefer/"
+
+[[params.socialIcons]]
+icon = "fab fa-twitter"
+title = "Twitter"
+url = "https://twitter.com/kciredor_"
+
+[[params.socialIcons]]
+icon = "fab fa-github"
+title = "GitHub"
+url = "https://github.com/kciredor"
+
+[[params.socialIcons]]
+icon = "fab fa-gitlab"
+title = "GitLab"
+url = "https://gitlab.com/kciredor"
+
+[menu]
+[[menu.main]]
+name = "Home"
+weight = 100
+url = "/"
+
+[[menu.main]]
+name = "Portfolio"
+weight = 200
+url = "/portfolio/"
+
+[[menu.main]]
+name = "Security Archive"
+weight = 200
+url = "/categories/security/"

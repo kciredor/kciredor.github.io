@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DevOps on Roderick Schaefer</title>
+    <link>https://kciredor.com/tags/devops/</link>
+    <description>Recent content in DevOps on Roderick Schaefer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 May 2019 10:00:00 +0200</lastBuildDate><atom:link href="https://kciredor.com/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Throwing 500 vm&#39;s at your fuzzing target being an individual security researcher</title>
+      <link>https://kciredor.com/blog/throwing-500-vms-fuzzing-target-individual-security-researcher/</link>
+      <pubDate>Fri, 03 May 2019 10:00:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/throwing-500-vms-fuzzing-target-individual-security-researcher/</guid>
+      
+        <description>Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.
+Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first CVE-2018-19713 for Adobe Reader. Found the bug using &amp;lsquo;What The Fuzz&amp;rsquo; targeting a custom plugin I coded which integrates with Adobe Reader.
+So what&amp;rsquo;s the next step?
+Fuzzing FoxitReader Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

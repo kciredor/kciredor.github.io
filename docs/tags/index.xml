@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Roderick Schaefer</title>
+    <link>https://kciredor.com/tags/</link>
+    <description>Recent content in Tags on Roderick Schaefer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 May 2019 10:00:00 +0200</lastBuildDate><atom:link href="https://kciredor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DevOps</title>
+      <link>https://kciredor.com/tags/devops/</link>
+      <pubDate>Fri, 03 May 2019 10:00:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/devops/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Fuzzing</title>
+      <link>https://kciredor.com/tags/fuzzing/</link>
+      <pubDate>Fri, 03 May 2019 10:00:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/fuzzing/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>PDF</title>
+      <link>https://kciredor.com/tags/pdf/</link>
+      <pubDate>Fri, 03 May 2019 10:00:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/pdf/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>BugBounty</title>
+      <link>https://kciredor.com/tags/bugbounty/</link>
+      <pubDate>Wed, 18 Oct 2017 15:30:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/bugbounty/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>IDOR</title>
+      <link>https://kciredor.com/tags/idor/</link>
+      <pubDate>Wed, 18 Oct 2017 15:30:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/idor/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>XSS</title>
+      <link>https://kciredor.com/tags/xss/</link>
+      <pubDate>Tue, 19 Sep 2017 15:20:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/tags/xss/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

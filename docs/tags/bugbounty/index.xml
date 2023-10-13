@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BugBounty on Roderick Schaefer</title>
+    <link>https://kciredor.com/tags/bugbounty/</link>
+    <description>Recent content in BugBounty on Roderick Schaefer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 Oct 2017 15:30:00 +0200</lastBuildDate><atom:link href="https://kciredor.com/tags/bugbounty/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Taking over every Ad on OLX (automated), an IDOR story</title>
+      <link>https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/</link>
+      <pubDate>Wed, 18 Oct 2017 15:30:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/</guid>
+      
+        <description>Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it&amp;rsquo;s time for a write-up!
+Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.</description>
+      
+    </item>
+    
+    <item>
+      <title>First bounty, time to step up my game</title>
+      <link>https://kciredor.com/blog/first-bounty-time-to-step-up-my-game/</link>
+      <pubDate>Tue, 19 Sep 2017 15:20:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/first-bounty-time-to-step-up-my-game/</guid>
+      
+        <description>What happened Hello again and thanks for reading my second blog post! After publishing my first blog I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won&amp;rsquo;t be able to mention company details and will have to mask url&amp;rsquo;s etc.</description>
+      
+    </item>
+    
+    <item>
+      <title>My first month as a full-time bug bounty hunter</title>
+      <link>https://kciredor.com/blog/my-first-month-as-a-full-time-bug-bounty-hunter/</link>
+      <pubDate>Mon, 07 Aug 2017 15:00:00 +0200</pubDate>
+      
+      <guid>https://kciredor.com/blog/my-first-month-as-a-full-time-bug-bounty-hunter/</guid>
+      
+        <description>Introduction Thank you for taking the time to read my first blog post. My name is Roderick Schaefer, known as kciredor in the exciting world of security bug bounties. I&amp;rsquo;m new and working hard to get very much involved. By sharing my journey and considerations so far, I&amp;rsquo;m hoping for more interested people to give it a shot!
+My background lies in software engineering with experience in development (go, python) and operations (linux, puppet/chef, docker/kubernetes).</description>
+      
+    </item>
+    
+  </channel>
+</rss>
