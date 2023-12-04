@@ -1,4 +1,17 @@
 portfolioitems:
+  - title: Customer Engineer
+    portfolioitem:
+      - name: Google
+        link: https://cloud.google.com/
+        description: "Assisting public sector organisations in modernising their technical infrastructure, I facilitate the transition to cloud-based solutions. This includes optimising the use of cloud technology to enhance services in public administrations, healthcare, research, and education, driving advancements in these sectors and aiding in the broader process of digitalisation."
+        tags:
+          - Infrastructure Modernisation
+          - Public Sector
+        status: 'OPEN'
+        start: '2023'
+        end: '-'
+        authors:
+          - Roderick Schaefer
   - title: DevSecOps Projects
     portfolioitem:
       - name: We handle IT
@@ -8,7 +21,7 @@ portfolioitems:
           - Development
           - Operations
           - Security
-        status: 'OPEN'
+        status: 'FINISHED'
         start: '2007'
         end: '2023'
         authors:
