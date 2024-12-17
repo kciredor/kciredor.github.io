@@ -1,7 +1,7 @@
 # Home
 
-_I am a problem solver_ with a strong ability to quickly analyze complex situations. I consider myself a people person and believe that not every problem requires just engineering, but also requires a people-centric approach. I am known for my creativity, passion, motivation, strategy, and pragmatism in my work.
+_Accelerating digital transformation_ in the Public Sector with Google Cloud as a Customer Engineer. Being part of the sales organization I bring the technical perspective to the conversation.
 
-_I love making and breaking software_, with over 15 years of experience as a software engineer specializing in DevSecOps. My technical expertise includes Python, Golang, Linux, Kubernetes, and currently exploring Rust. I also enjoy conducting security research through binary exploitation and fuzzing, as well as bug bounty hunting for website vulnerabilities.
+_Proven track record_ in software engineering and infrastructure gained at organizations such as Schuberg Philis (Mission Critical), NU.nl (High Traffic) and government entities including VNG (initiator of the Haven standard) and MinBZK. In-depth experience with technologies like Linux, Kubernetes, Golang, Python and Cloud.
 
-_I enjoy alternating between various hobbies_, including martial arts, engineering, hacking, trading, cubing, chess, reading, running, swimming and traveling.
+_Lifelong learner_ known for my creativity, passion, motivation, strategy, and pragmatism. I also enjoy alternating between various hobbies, including martial arts, engineering, hacking, trading, cubing, chess, reading, running, swimming and traveling.

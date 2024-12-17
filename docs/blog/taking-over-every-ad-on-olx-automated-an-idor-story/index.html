@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   dir="ltr"
   lang="en"
@@ -7,6 +7,7 @@
     class="html theme--dark"
   
 ><head>
+  <meta charset="utf-8" />
   <title>
     Roderick Schaefer
         |
@@ -17,8 +18,7 @@
 
   </title>
 
-  
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.119.0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="generator" content="Hugo 0.134.3"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="author" content="Roderick Schaefer" />
   <meta
     name="description"
@@ -30,8 +30,8 @@
     
     <link
       rel="stylesheet"
-      href="/scss/main.min.26d8396ded3f4aa47cc8d77a9fcb09fee1d20d223c6b3f074a21c7e217bc8c6d.css"
-      integrity="sha256-Jtg5be0/SqR8yNd6n8sJ/uHSDSI8az8HSiHH4he8jG0="
+      href="/scss/main.min.1cac29897bb941adf4246700acb99deffbfdf35a02ffc4ae81484456ebe430c3.css"
+      integrity="sha256-HKwpiXu5Qa30JGcArLmd7/v981oC/8SugUhEVuvkMMM="
       crossorigin="anonymous"
       type="text/css"
     />
@@ -49,32 +49,32 @@
   
   <link
     rel="stylesheet"
-    href="/fontawesome/css/fontawesome.min.7d272de35b410fb165377550cdf9c4d3a80fbbcc961e111914e4d5c0eaf5729f.css"
-    integrity="sha256-fSct41tBD7FlN3VQzfnE06gPu8yWHhEZFOTVwOr1cp8="
+    href="/fontawesome/css/fontawesome.min.137b1cf3cea9a8adb7884343a9a5ddddf4280f59153f74dc782fb7f7bf0d0519.css"
+    integrity="sha256-E3sc886pqK23iENDqaXd3fQoD1kVP3TceC&#43;3978NBRk="
     crossorigin="anonymous"
     type="text/css"
   />
   
   <link
     rel="stylesheet"
-    href="/fontawesome/css/solid.min.55d8333481b07a08e07cf6f37319753a2b47e99f4c395394c5747b48b495aa9b.css"
-    integrity="sha256-VdgzNIGwegjgfPbzcxl1OitH6Z9MOVOUxXR7SLSVqps="
+    href="/fontawesome/css/solid.min.e65dc5b48fb5f39b142360c57c3a215744c94e56c755c929cc3e88fe12aab4d3.css"
+    integrity="sha256-5l3FtI&#43;185sUI2DFfDohV0TJTlbHVckpzD6I/hKqtNM="
     crossorigin="anonymous"
     type="text/css"
   />
   
   <link
     rel="stylesheet"
-    href="/fontawesome/css/regular.min.a7448d02590b43449364b6b5922ed9af5410abb4de4238412a830316dedb850b.css"
-    integrity="sha256-p0SNAlkLQ0STZLa1ki7Zr1QQq7TeQjhBKoMDFt7bhQs="
+    href="/fontawesome/css/regular.min.6f4f16d58da1c82c0c3a3436e021a3d39b4742f741192c546e73e947eacfd92f.css"
+    integrity="sha256-b08W1Y2hyCwMOjQ24CGj05tHQvdBGSxUbnPpR&#43;rP2S8="
     crossorigin="anonymous"
     type="text/css"
   />
   
   <link
     rel="stylesheet"
-    href="/fontawesome/css/brands.min.9ed75a5d670c953fe4df935937674b4646f92674367e9e66eb995bb04e821647.css"
-    integrity="sha256-ntdaXWcMlT/k35NZN2dLRkb5JnQ2fp5m65lbsE6CFkc="
+    href="/fontawesome/css/brands.min.e10425ad768bc98ff1fb272a0ac8420f9d1ba22f0612c08ff1010c95080ffe7e.css"
+    integrity="sha256-4QQlrXaLyY/x&#43;ycqCshCD50boi8GEsCP8QEMlQgP/n4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -110,23 +110,31 @@
 
   
 
-
   
-  <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Taking over every Ad on OLX (automated), an IDOR story"/>
-<meta name="twitter:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it&rsquo;s time for a write-up!
-Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff."/>
-
 
 
   
-  <meta property="og:title" content="Taking over every Ad on OLX (automated), an IDOR story" />
-<meta property="og:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it&rsquo;s time for a write-up!
-Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2017-10-18T15:30:00+02:00" />
-<meta property="article:modified_time" content="2017-10-18T15:30:00+02:00" /><meta property="og:site_name" content="Roderick Schaefer" />
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Taking over every Ad on OLX (automated), an IDOR story">
+  <meta name="twitter:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!
+Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.">
+
+
+
+  
+  <meta property="og:url" content="https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/">
+  <meta property="og:site_name" content="Roderick Schaefer">
+  <meta property="og:title" content="Taking over every Ad on OLX (automated), an IDOR story">
+  <meta property="og:description" content="Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it’s time for a write-up!
+Some context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2017-10-18T15:30:00+02:00">
+    <meta property="article:modified_time" content="2017-10-18T15:30:00+02:00">
+    <meta property="article:tag" content="BugBounty">
+    <meta property="article:tag" content="IDOR">
 
 
 
@@ -144,7 +152,7 @@ Some context OLX powers the LetGo website for a couple of countries including Th
         "alternativeHeadline": "",
         "description": "
       
-        Public disclosure Hi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it\u0026rsquo;s time for a write-up!\nSome context OLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.
+        \u003ch1 id=\u0022public-disclosure\u0022\u003ePublic disclosure\u003c\/h1\u003e\n\u003cp\u003eHi again! Thank you for reading my third blog post. Happy to share all the details with you on the Insecure Direct Object Reference attack (IDOR) as mentioned in my first blog. It has been resolved by OLX and publicly disclosed on HackerOne, meaning it\u0026rsquo;s time for a write-up!\u003c\/p\u003e\n\u003ch1 id=\u0022some-context\u0022\u003eSome context\u003c\/h1\u003e\n\u003cp\u003eOLX powers the LetGo website for a couple of countries including The Netherlands. LetGo is an eBay like website, allowing you to buy new stuff and let go of old stuff.\u003c\/p\u003e
 
 
       
@@ -260,13 +268,13 @@ Some context OLX powers the LetGo website for a couple of countries including Th
       
         <li class="sidebar__list-item">
           <a
-            href="https://twitter.com/kciredor_"
+            href="https://x.com/kciredor_"
             target="_blank"
             rel="noopener me"
-            aria-label="Twitter"
-            title="Twitter"
+            aria-label="X"
+            title="X"
           >
-            <i class="fab fa-twitter fa-2x" aria-hidden="true"></i>
+            <i class="fab fa-x-twitter fa-2x" aria-hidden="true"></i>
           </a>
         </li>
       
@@ -313,17 +321,20 @@ Some context OLX powers the LetGo website for a couple of countries including Th
     integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
     crossorigin="anonymous"
   ></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-BHW0E1E3RC', { 'anonymize_ip': false });
-}
-</script>
-</div>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-BHW0E1E3RC');
+        }
+      </script></div>
 </aside>
       <main
         
@@ -412,7 +423,9 @@ if (!doNotTrack) {
   >
     
     <div class="post__content">
-      <h1>Taking Over Every Ad on OLX (Automated), an IDOR Story</h1>
+      
+        <h1>Taking Over Every Ad on OLX (Automated), an IDOR Story</h1>
+      
       
         <ul class="post__meta">
           <li class="post__meta-item">
@@ -496,6 +509,7 @@ kciredor</p>
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;Taking over every Ad on OLX (automated), an IDOR story&quot; by <a href="https://twitter.com/kciredor_?ref_src=twsrc%5Etfw">@kciredor_</a> <a href="https://t.co/kbKfihH04L">https://t.co/kbKfihH04L</a> <a href="https://twitter.com/hashtag/bugbounty?src=hash&amp;ref_src=twsrc%5Etfw">#bugbounty</a> <a href="https://twitter.com/hashtag/infosec?src=hash&amp;ref_src=twsrc%5Etfw">#infosec</a> <a href="https://twitter.com/hashtag/idor?src=hash&amp;ref_src=twsrc%5Etfw">#idor</a> <a href="https://twitter.com/hashtag/olx?src=hash&amp;ref_src=twsrc%5Etfw">#olx</a></p>&mdash; Roderick Schaefer (@kciredor_) <a href="https://twitter.com/kciredor_/status/920647329652371456?ref_src=twsrc%5Etfw">October 18, 2017</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+
 </div>
     <div class="post__footer">
       
@@ -514,7 +528,7 @@ kciredor</p>
     <div id="comment">
           <h2>comments</h2>
           <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -555,15 +569,18 @@ kciredor</p>
     integrity="sha256-Ekj6dSdeXvDL7yfoweJ9xQfERa46LH0u0L4ICVVdrGQ="
     crossorigin="anonymous"
   ></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-BHW0E1E3RC', { 'anonymize_ip': false });
-}
-</script>
-</body>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BHW0E1E3RC"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-BHW0E1E3RC');
+        }
+      </script></body>
 </html>

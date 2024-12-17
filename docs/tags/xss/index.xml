@@ -14,7 +14,8 @@
       
       <guid>https://kciredor.com/blog/first-bounty-time-to-step-up-my-game/</guid>
       
-        <description>What happened Hello again and thanks for reading my second blog post! After publishing my first blog I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won&amp;rsquo;t be able to mention company details and will have to mask url&amp;rsquo;s etc.</description>
+        <description>&lt;h1 id=&#34;what-happened&#34;&gt;What happened&lt;/h1&gt;
+&lt;p&gt;Hello again and thanks for reading my second blog post! After publishing my &lt;a href=&#34;https://kciredor.com/blog/my-first-month-as-a-full-time-bug-bounty-hunter/&#34;&gt;first blog&lt;/a&gt; I kept on trying to hack different companies and websites. Not as easy as I had hoped for! It took me quite some time to find another security issue after the IDOR in my first month. This SOME issue I found is not to be made public, so I won&amp;rsquo;t be able to mention company details and will have to mask url&amp;rsquo;s etc.&lt;/p&gt;</description>
       
     </item>
     

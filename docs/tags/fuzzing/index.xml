@@ -14,10 +14,12 @@
       
       <guid>https://kciredor.com/blog/throwing-500-vms-fuzzing-target-individual-security-researcher/</guid>
       
-        <description>Adobe Reader progress One year ago I blogged about my many attempts and failures at fuzzing Adobe Reader and finding exploitable security issues.
-Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first CVE-2018-19713 for Adobe Reader. Found the bug using &amp;lsquo;What The Fuzz&amp;rsquo; targeting a custom plugin I coded which integrates with Adobe Reader.
-So what&amp;rsquo;s the next step?
-Fuzzing FoxitReader Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.</description>
+        <description>&lt;h1 id=&#34;adobe-reader-progress&#34;&gt;Adobe Reader progress&lt;/h1&gt;
+&lt;p&gt;One year ago I blogged about my many attempts and failures at &lt;a href=&#34;https://kciredor.com/blog/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit/&#34;&gt;fuzzing Adobe Reader&lt;/a&gt; and finding exploitable security issues.&lt;/p&gt;
+&lt;p&gt;Meanwhile, I realized that writing your own fuzzers is the way to go as confirmed by my first &lt;a href=&#34;https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-19713&#34;&gt;CVE-2018-19713&lt;/a&gt; for Adobe Reader. Found the bug using &amp;lsquo;What The Fuzz&amp;rsquo; targeting a custom plugin I coded which integrates with Adobe Reader.&lt;/p&gt;
+&lt;p&gt;So what&amp;rsquo;s the next step?&lt;/p&gt;
+&lt;h1 id=&#34;fuzzing-foxitreader&#34;&gt;Fuzzing FoxitReader&lt;/h1&gt;
+&lt;p&gt;Excellent research has been shared on exploiting FoxitReader by @steventseeley, which inspired me to switch from Adobe to Foxit as a target.&lt;/p&gt;</description>
       
     </item>
     
@@ -28,8 +30,9 @@ Fuzzing FoxitReader Excellent research has been shared on exploiting FoxitReader
       
       <guid>https://kciredor.com/blog/fuzzing-adobe-reader-for-exploitable-vulns-fun-not-profit/</guid>
       
-        <description>Binaries vs websites It has been half a year since my last blog post covering an IDOR in a website API. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.
-The reason I switched is my passion for low-level engineering. Reading through disassemblies, walking along with code being executed in a debugger, memory corruption, etc.</description>
+        <description>&lt;h1 id=&#34;binaries-vs-websites&#34;&gt;Binaries vs websites&lt;/h1&gt;
+&lt;p&gt;It has been half a year since my last blog post covering an &lt;a href=&#34;https://kciredor.com/blog/taking-over-every-ad-on-olx-automated-an-idor-story/&#34;&gt;IDOR in a website API&lt;/a&gt;. About time to write about something new and hopefully interesting! Having switched my focus from websites to binaries a new world opened up to me.&lt;/p&gt;
+&lt;p&gt;The reason I switched is my passion for low-level engineering. Reading through disassemblies, walking along with code being executed in a debugger, memory corruption, etc. Reverse engineering has always been a passion of mine and binary exploitation seems to get pretty close. I got completely hooked during @corelanc0d3r&amp;rsquo;s Exploit Development Bootcamp, after which I treated myself to the Advanced class as well.&lt;/p&gt;</description>
       
     </item>
     
